@@ -1,0 +1,18 @@
+﻿The extensible framework application scans all directories for files whose names
+match the expression *.info.txt. 
+
+Each line of this INFO.TXT file should contain the  file name of a plugin 
+relative to the parent directory of the INFO.TXT file.
+
+An easy way of doing this is to create the text file manually in the build 
+output folder. However, a more robust way of achieving the same purpose is by
+utilising build events.
+
+In the Build Events dialog (Project Properties > Compile > Build Events), enter 
+the following in the Post-build event command line text box
+
+    CMD.EXE /C ECHO "$(TargetFileName)" > "$(TargetDir)$(TargetName).info.txt"
+
+This will create an INFO.TXT file with the same name as your output file in the
+build output directory. the INFO.TXT file will also be automatically populated
+with the file name of the build output (the DLL file containing the plugin).
