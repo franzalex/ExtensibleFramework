@@ -1,29 +1,29 @@
 ﻿Imports GuidAttribute = System.Runtime.InteropServices.GuidAttribute
 
-''' <summary>Base class for all plugins.</summary>
+''' <summary>Base class for all plug-ins.</summary>
 ''' <remarks>
-''' This is the base class that all plugins must inherit from in order to be correctly detected.
+''' This is the base class that all plug-ins must inherit from in order to be correctly detected.
 ''' </remarks>
 Public MustInherit Class Plugin
     ' The MustInherit keyword is used to prevent 'accidental' creation of instances of this class.
 
-    ' plugin methods
+    ' plug-in methods
 
     Dim _fileName As String
 
-    ''' <summary>Gets the description of the plugin.</summary>
+    ''' <summary>Gets the description of the plug-in.</summary>
     Public MustOverride ReadOnly Property Description As String
 
-    ''' <summary>Gets the file name of the file this plugin was created from.</summary>
+    ''' <summary>Gets the file name of the file this plug-in was created from.</summary>
     Public ReadOnly Property FileName As String
         Get
             Return _fileName
         End Get
     End Property
 
-    ''' <summary>Gets the GUID (Globally Universal ID) of the plugin.</summary>
+    ''' <summary>Gets the GUID (Globally Universal ID) of the plug-in.</summary>
     ''' <remarks>
-    ''' This property was included so classes inheriting this class can quickly return this value as the plugin ID.
+    ''' This property was included so classes inheriting this class can quickly return this value as the plug-in ID.
     ''' </remarks>
     <System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Advanced)>
     Public ReadOnly Property Guid As Guid
@@ -33,17 +33,17 @@ Public MustInherit Class Plugin
         End Get
     End Property
 
-    ''' <summary>Gets the plugin icon.</summary>
+    ''' <summary>Gets the plug-in icon.</summary>
     Public Overridable ReadOnly Property Icon As System.Drawing.Image
         Get
             Return My.Resources.PluginIcon_32
         End Get
     End Property
 
-    ''' <summary>Gets the name of the plugin.</summary>
+    ''' <summary>Gets the name of the plug-in.</summary>
     Public MustOverride ReadOnly Property Name As String
 
-    ''' <summary>Gets the plugin version.</summary>
+    ''' <summary>Gets the plug-in version.</summary>
     Public Overridable ReadOnly Property Version As String
         Get
             ' the return value is a string here so that you can return values like
@@ -56,14 +56,14 @@ Public MustInherit Class Plugin
     ''' <value>The unique identifier.</value>
     Public Overridable ReadOnly Property UniqueID As String
         Get
-            ' the unique id of each plugin should in theory be different to distinguish between two
-            ' or more plugins with the same name.
-            ' it is recommended not to change the Unique ID of plugins as the version changes
+            ' the unique id of each plug-in should in theory be different to distinguish between two
+            ' or more plug-ins with the same name.
+            ' it is recommended not to change the Unique ID of plug-ins as the version changes
             Return Guid.ToString()
         End Get
     End Property
 
-    ''' <summary>Gets the launchers for launching activities directly for this plugin.</summary>
+    ''' <summary>Gets the launchers for launching activities directly for this plug-in.</summary>
     Public MustOverride ReadOnly Property ActivityLaunchers As IEnumerable(Of ActivityLauncher)
 
     ' Activity and command invocation functions
@@ -74,9 +74,9 @@ Public MustInherit Class Plugin
     ''' <returns>An instance of <seealso cref="ActivityControl"/>.</returns>
     Public MustOverride Function CreateActivity(activityID As String) As ActivityControl
 
-    ''' <summary>Gets a value indicating whether the plugin supports the specified command.</summary>
+    ''' <summary>Gets a value indicating whether the plug-in supports the specified command.</summary>
     ''' <param name="command">The command to be evaluated.</param>
-    ''' <returns><c>true</c> if the plugin supports the specified command; else <c>false</c>.</returns>
+    ''' <returns><c>true</c> if the plug-in supports the specified command; else <c>false</c>.</returns>
     Public MustOverride Function SupportsCommand(command As String) As Boolean
 
     ''' <summary>
@@ -120,7 +120,7 @@ Public MustInherit Class Plugin
     End Function
 
     ''' <summary>Creates a <see cref="Plugin"/> from the specified object.</summary>
-    ''' <param name="obj">Object to attempt creating a plugin from.</param>
+    ''' <param name="obj">Object to attempt creating a plug-in from.</param>
     Public Shared Function FromFile(obj As Object) As Plugin
         If TypeOf obj Is String Then
             Return Plugin.FromFile(obj.ToString())

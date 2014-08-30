@@ -32,10 +32,10 @@ Public Class Home
         End Select
     End Function
 
-    ''' <summary>Gets the description of the plugin.</summary>
+    ''' <summary>Gets the description of the plug-in.</summary>
     Public Overrides ReadOnly Property Description As String
         Get
-            Return "Home screen plugin for Extensible Application Framework"
+            Return "Home screen plug-in for Extensible Application Framework"
         End Get
     End Property
 
@@ -61,14 +61,14 @@ Public Class Home
         End If
     End Function
 
-    ''' <summary>Gets the activities that can be launched directly from this plugin.</summary>
+    ''' <summary>Gets the activities that can be launched directly from this plug-in.</summary>
     Public Overrides ReadOnly Property ActivityLaunchers As IEnumerable(Of Core.ActivityLauncher)
         Get
-            Return _mainActivities.AsReadOnly() ' return as readonly to prevent modifications
+            Return _mainActivities.AsReadOnly() ' return as read only to prevent modifications
         End Get
     End Property
 
-    ''' <summary>Gets the name of the plugin.</summary>
+    ''' <summary>Gets the name of the plug-in.</summary>
     Public Overrides ReadOnly Property Name As String
         Get
             Return "Extensible Application Framework Home"
@@ -79,19 +79,19 @@ Public Class Home
     ''' <param name="command">The command to be run.</param>
     ''' <returns>The result produced from running the command.</returns>
     Public Overrides Function RunCommand(command As String) As Object
-        ' this plugin does not run any special commands
+        ' this plug-in does not run any special commands
         Return Nothing
     End Function
 
     ''' <summary>
-    ''' Gets a value indicating whether the plugin supports the specified command.
+    ''' Gets a value indicating whether the plug-in supports the specified command.
     ''' </summary>
     ''' <param name="command">The command to be evaluated.</param>
     ''' <returns>
-    '''   <c>true</c> if the plugin supports the specified command; else <c>false</c>.
+    '''   <c>true</c> if the plug-in supports the specified command; else <c>false</c>.
     ''' </returns>
     Public Overrides Function SupportsCommand(command As String) As Boolean
-        ' this plugin supports only the "go-home" command
+        ' this plug-in supports only the "go-home" command
         Return command.ToLower() = "go-home"
     End Function
 End Class

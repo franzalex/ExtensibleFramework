@@ -53,6 +53,21 @@ Public Class ActivityControl
         End Get
     End Property
 
+    ''' <summary>Gets an ActivityLauncher that can be used to start this control.</summary>
+    ''' <value>An ActivityLauncher that can be used to start this control.</value>
+    Public Overridable ReadOnly Property Launcher As ActivityLauncher
+        Get
+            Static _launcher As ActivityLauncher
+
+            ' create a launcher if none has been created yet
+            If _launcher Is Nothing Then
+                _launcher = New ActivityLauncher(Me.Text, Me.Icon)
+            End If
+
+            Return _launcher
+        End Get
+    End Property
+
     ''' <summary>Gets the icon associated with this <see cref="ActivityControl"/>..</summary>
     Public Overridable ReadOnly Property Icon As Image
         Get

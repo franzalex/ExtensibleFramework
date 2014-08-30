@@ -16,7 +16,7 @@ Public Class ActivityLauncher
     ''' <param name="caption">The caption displayed for the <see cref="ActivityLauncher" />.</param>
     ''' <param name="icon">The icon displayed for the <see cref="ActivityLauncher" />.</param>
     ''' <param name="description">Additional descriptive text for the <see cref="ActivityLauncher" />.</param>
-    ''' <remarks>The <paramref name="icon" /> should preferrably be 32x32 pixels in size.</remarks>
+    ''' <remarks>The <paramref name="icon" /> should preferably be 32x32 pixels in size.</remarks>
     Public Sub New(caption As String, icon As Image, Optional description As String = "")
         _caption = caption
         _icon = icon
