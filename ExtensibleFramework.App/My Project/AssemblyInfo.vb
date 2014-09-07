@@ -8,11 +8,11 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("ExternalFramework.App")> 
-<Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("ExternalFramework.App")> 
-<Assembly: AssemblyCopyright("Copyright ©  2014")> 
+<Assembly: AssemblyTitle("Leaf")> 
+<Assembly: AssemblyDescription("Lightweight Extensible Application Framework")> 
+<Assembly: AssemblyCompany("Dinofage")> 
+<Assembly: AssemblyProduct("Lightweight Extensibile Application Framework")> 
+<Assembly: AssemblyCopyright("Copyright © Dinofage 2014")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
