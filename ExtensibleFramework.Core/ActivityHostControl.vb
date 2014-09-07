@@ -44,7 +44,7 @@ Public Class ActivityHostControl
         End Get
     End Property
 
-    ''' <summary>Gets the plugins detected by the control.</summary>
+    ''' <summary>Gets the plug-ins detected by the control.</summary>
     Public ReadOnly Property Plugins As IEnumerable(Of Plugin)
         Get
             Return _plugins.Values.ToList().AsReadOnly()
@@ -82,7 +82,7 @@ Public Class ActivityHostControl
     ''' <summary>Finds the <see cref="ActivityControl" /> with the specified ActivityID.</summary>
     ''' <param name="activityID">The ID of the <seealso cref="ActivityControl" /> to return.</param>
     ''' <param name="searchAllPlugins">
-    ''' If set to <c>true</c> all plugins will be searched for a match. Otherwise just cached 
+    ''' If set to <c>true</c> all plug-ins will be searched for a match. Otherwise just cached 
     ''' activities will be searched for a match.
     ''' </param>
     ''' <returns></returns>
@@ -204,20 +204,20 @@ Public Class ActivityHostControl
         End If
     End Function
 
-    ''' <summary>Scans the specified directories for plugins.</summary>
-    ''' <param name="directories">The directories to scan for plugins.</param>
+    ''' <summary>Scans the specified directories for plug-ins.</summary>
+    ''' <param name="directories">The directories to scan for plug-ins.</param>
     Public Sub ScanForPlugins(ParamArray directories As String())
         ' scan logic:
         '  1. go through each directory
         '  2. get all files whose names end with .info.txt
-        '  3. read each line from the file (typically 1 line only indicating which dll is the plugin)
+        '  3. read each line from the file (typically 1 line only indicating which DLL is the plug-in)
         '  4. strip quotation marks and spaces from the line
-        '  5. filter non blanks and assign it as the plugin file name
-        '  6. set the plugin directory (the same directory as the current .info.txt file)
-        '  7. set the plugin file name (full file name)
+        '  5. filter non blanks and assign it as the plug-in file name
+        '  6. set the plug-in directory (the same directory as the current .info.txt file)
+        '  7. set the plug-in file name (full file name)
         '  8. filter for files that exist only
-        '  9. filter distinct plugin files
-        ' 10. search for and create a plugin from the file
+        '  9. filter distinct plug-in files
+        ' 10. search for and create a plug-in from the file
         Dim scanResult = From directory In directories
                          From file In IO.Directory.GetFiles(directory, "*.info.txt", IO.SearchOption.AllDirectories)
                          From line In System.IO.File.ReadAllLines(file)
@@ -229,7 +229,7 @@ Public Class ActivityHostControl
                          Select pluginFile Distinct
                          Select ExtensibleFramework.Core.Plugin.FromFile(pluginFile)
 
-        ' if there were any plugins found, update our plugin dictionary to those ones found
+        ' if there were any plug-ins found, update our plug-in dictionary to those ones found
         If scanResult.Any() Then
             _plugins = scanResult.ToDictionary(Function(k) k.UniqueID)
 

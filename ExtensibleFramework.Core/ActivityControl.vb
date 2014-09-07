@@ -145,7 +145,7 @@ Public Class ActivityControl
         Me.OnResumed(EventArgs.Empty)
     End Sub
 
-    ''' <summary>Determines whether this instance can be stoped.</summary>
+    ''' <summary>Determines whether this instance can be stopped.</summary>
     ''' <returns><c>true</c> if this <seealso cref="ActivityControl"/> can be stopped.</returns>
     Public Function CanStopActivity() As Boolean
         Dim e = New StoppingEventArgs()

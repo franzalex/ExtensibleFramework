@@ -9,7 +9,7 @@ Public Class frmMain
         AddHandler ahcActivityHost.Navigator.HasNavigated, AddressOf ActivityHost_HasNavigated
 
 
-        ' get the solution directory (typically 3 diretories up from debug output)
+        ' get the solution directory (typically 3 directories up from debug output)
         Dim exeFile = System.Reflection.Assembly.GetExecutingAssembly().Location
         Dim myDir = System.IO.Directory.GetParent(exeFile).FullName
         Dim solutionDir = My.Application.Directory
@@ -20,7 +20,7 @@ Public Class frmMain
         pluginDirs.Add(solutionDir)
 
 
-        ' load all plugins located in the solution
+        ' load all plug-ins located in the solution
         ahcActivityHost.ScanForPlugins(pluginDirs.ToArray())
 
 
@@ -51,7 +51,7 @@ Public Class frmMain
 
     Private Sub tsmPluginsAddDir_Click(sender As Object, e As EventArgs) Handles tsmPluginsAddDir.Click
         Using fbd As New FolderBrowserDialog() With {.SelectedPath = My.Application.Directory,
-                                                     .Description = "Select plugin directory."}
+                                                     .Description = "Select plug-in directory."}
             If fbd.ShowDialog() = Windows.Forms.DialogResult.OK Then
                 pluginDirs.Add(fbd.SelectedPath)
 
@@ -62,7 +62,7 @@ Public Class frmMain
 
     Private Sub tsmAddPluginFile_Click(sender As Object, e As EventArgs) Handles tsmAddPluginFile.Click
         Using ofd As New OpenFileDialog() With {.InitialDirectory = My.Application.Directory,
-                                                .Filter = "Plugin Info File|(*.info.txt)"}
+                                                .Filter = "Plug-in Info File|(*.info.txt)"}
             If ofd.ShowDialog() = Windows.Forms.DialogResult.OK Then
                 pluginDirs.Add(System.IO.Directory.GetParent(ofd.FileName).FullName)
 

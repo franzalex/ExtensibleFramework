@@ -124,11 +124,11 @@ Friend Module ExtensionMethods
 
             'current char is lowercase
             If Char.IsLower(chars(x)) Then
-                If Not Char.IsLetter(prevChar) Then 'prev char is not a letter
-                    If splitAtNonLetters Then   'append with space if split at nonletter
+                If Not Char.IsLetter(prevChar) Then 'previous char is not a letter
+                    If splitAtNonLetters Then   'append with space if split at non-letter
                         returnVal &= " " & chars(x).ToString
                         Continue For
-                    Else                        'append w/o space if not split at nonletter
+                    Else                        'append w/o space if not split at non-letter
                         returnVal &= chars(x).ToString
                         Continue For
                     End If
@@ -245,55 +245,64 @@ Friend Module ExtensionMethods
     ''' Replaces the format item in a specified string with the string 
     ''' representation of a corresponding object in a specified array.
     ''' </summary>
-    ''' <param name="s"> A composite format string.</param>
+    ''' <param name="format"> A composite format string.</param>
     ''' <param name="arg0">The first Object to format.</param>
-    ''' <returns>A copy of format in which the format items have been replaced by the 
-    ''' String equivalent of the corresponding instances of Object in args.</returns>
+    ''' <returns>
+    ''' A copy of <paramref name="format"/> in which the format items have been 
+    ''' replaced by the string representation of <paramref name="arg0"/>.
+    ''' </returns>
     <DebuggerStepThrough(), Extension()> _
-    Public Function FormatWith(ByVal s As String, ByVal arg0 As Object) As String
-        Return String.Format(s, arg0)
+    Public Function FormatWith(ByVal format As String, ByVal arg0 As Object) As String
+        Return String.Format(format, arg0)
     End Function
 
     ''' <summary>
     ''' Replaces the format item in a specified string with the string 
     ''' representation of a corresponding object in a specified array.
     ''' </summary>
-    ''' <param name="s"> A composite format string.</param>
+    ''' <param name="format"> A composite format string.</param>
     ''' <param name="arg0">The first Object to format.</param>
     ''' <param name="arg1">The second Object to format.</param>
-    ''' <returns>A copy of format in which the format items have been replaced by the 
-    ''' String equivalent of the corresponding instances of Object in args.</returns>
+    ''' <returns>
+    ''' A copy of <paramref name="format"/> in which the format items have been replaced by 
+    ''' the string representations of <paramref name="arg0"/> and <paramref name="arg1"/>.
+    ''' </returns>
     <DebuggerStepThrough(), Extension()> _
-    Public Function FormatWith(ByVal s As String, ByVal arg0 As Object, ByVal arg1 As Object) As String
-        Return String.Format(s, arg0, arg1)
+    Public Function FormatWith(ByVal format As String, ByVal arg0 As Object, ByVal arg1 As Object) As String
+        Return String.Format(format, arg0, arg1)
     End Function
 
     ''' <summary>
     ''' Replaces the format item in a specified string with the string 
     ''' representation of a corresponding object in a specified array.
     ''' </summary>
-    ''' <param name="s"> A composite format string.</param>
+    ''' <param name="format"> A composite format string.</param>
     ''' <param name="arg0">The first Object to format.</param>
     ''' <param name="arg1">The second Object to format.</param>
     ''' <param name="arg2">The third Object to format.</param>
-    ''' <returns>A copy of format in which the format items have been replaced by the 
-    ''' String equivalent of the corresponding instances of Object in args.</returns>
+    ''' <returns>
+    ''' A copy of <paramref name="format"/> in which the format items have been 
+    ''' replaced by the string representations of <paramref name="arg0"/>, 
+    ''' <paramref name="arg1"/> and <paramref name="arg2"/>.
+    ''' </returns>
     <DebuggerStepThrough(), Extension()> _
-    Public Function FormatWith(ByVal s As String, ByVal arg0 As Object, ByVal arg1 As Object, ByVal arg2 As Object) As String
-        Return String.Format(s, arg0, arg1, arg2)
+    Public Function FormatWith(ByVal format As String, ByVal arg0 As Object, ByVal arg1 As Object, ByVal arg2 As Object) As String
+        Return String.Format(format, arg0, arg1, arg2)
     End Function
 
     ''' <summary>
     ''' Replaces the format item in a specified string with the string 
     ''' representation of a corresponding object in a specified array.
     ''' </summary>
-    ''' <param name="s"> A composite format string.</param>
+    ''' <param name="format"> A composite format string.</param>
     ''' <param name="args">An Object array containing zero or more objects to format.</param>
-    ''' <returns>A copy of format in which the format items have been replaced by the 
-    ''' String equivalent of the corresponding instances of Object in args.</returns>
+    ''' <returns>
+    ''' A copy of <paramref name="format"/> in which the format items have been replaced by the 
+    ''' string representation of the corresponding objects in <paramref name="args"/>.
+    ''' </returns>
     <DebuggerStepThrough(), Extension()> _
-    Public Function FormatWith(ByVal s As String, ByVal ParamArray args As Object()) As String
-        Return String.Format(s, args)
+    Public Function FormatWith(ByVal format As String, ByVal ParamArray args As Object()) As String
+        Return String.Format(format, args)
     End Function
 #End Region
 End Module
