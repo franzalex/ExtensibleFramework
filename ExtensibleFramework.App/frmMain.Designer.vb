@@ -50,7 +50,7 @@ Partial Class frmMain
         'tsbBack
         '
         Me.tsbBack.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.tsbBack.Image = Global.ExternalFramework.App.My.Resources.Resources.NavBack
+        Me.tsbBack.Image = Global.ExtensibleFramework.App.My.Resources.Resources.NavBack
         Me.tsbBack.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsbBack.Name = "tsbBack"
         Me.tsbBack.Size = New System.Drawing.Size(23, 22)
@@ -59,7 +59,7 @@ Partial Class frmMain
         'tsbHome
         '
         Me.tsbHome.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.tsbHome.Image = Global.ExternalFramework.App.My.Resources.Resources.HomeHS
+        Me.tsbHome.Image = Global.ExtensibleFramework.App.My.Resources.Resources.HomeHS
         Me.tsbHome.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsbHome.Name = "tsbHome"
         Me.tsbHome.Size = New System.Drawing.Size(23, 22)
@@ -79,7 +79,7 @@ Partial Class frmMain
         '
         Me.tsbPluginTool.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.tsbPluginTool.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmAddPluginFile, Me.tsmPluginsAddDir, Me.tsPluginSep1, Me.tsmPluginsRescan})
-        Me.tsbPluginTool.Image = Global.ExternalFramework.App.My.Resources.Resources.plugin
+        Me.tsbPluginTool.Image = Global.ExtensibleFramework.App.My.Resources.Resources.plugin
         Me.tsbPluginTool.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsbPluginTool.Name = "tsbPluginTool"
         Me.tsbPluginTool.Size = New System.Drawing.Size(75, 22)
@@ -87,14 +87,14 @@ Partial Class frmMain
         '
         'tsmAddPluginFile
         '
-        Me.tsmAddPluginFile.Image = Global.ExternalFramework.App.My.Resources.Resources.plugin_add
+        Me.tsmAddPluginFile.Image = Global.ExtensibleFramework.App.My.Resources.Resources.plugin_add
         Me.tsmAddPluginFile.Name = "tsmAddPluginFile"
         Me.tsmAddPluginFile.Size = New System.Drawing.Size(169, 22)
         Me.tsmAddPluginFile.Text = "Add Plugin File"
         '
         'tsmPluginsAddDir
         '
-        Me.tsmPluginsAddDir.Image = Global.ExternalFramework.App.My.Resources.Resources.folder_add
+        Me.tsmPluginsAddDir.Image = Global.ExtensibleFramework.App.My.Resources.Resources.folder_add
         Me.tsmPluginsAddDir.Name = "tsmPluginsAddDir"
         Me.tsmPluginsAddDir.Size = New System.Drawing.Size(169, 22)
         Me.tsmPluginsAddDir.Text = "Add Plugin Folder"
@@ -106,7 +106,7 @@ Partial Class frmMain
         '
         'tsmPluginsRescan
         '
-        Me.tsmPluginsRescan.Image = Global.ExternalFramework.App.My.Resources.Resources.folder_find
+        Me.tsmPluginsRescan.Image = Global.ExtensibleFramework.App.My.Resources.Resources.folder_find
         Me.tsmPluginsRescan.Name = "tsmPluginsRescan"
         Me.tsmPluginsRescan.Size = New System.Drawing.Size(169, 22)
         Me.tsmPluginsRescan.Text = "Rescan Plugins"
