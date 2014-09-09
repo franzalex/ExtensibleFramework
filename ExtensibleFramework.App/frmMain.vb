@@ -10,8 +10,6 @@ Public Class frmMain
 
 
         ' get the solution directory (typically 3 directories up from debug output)
-        Dim exeFile = System.Reflection.Assembly.GetExecutingAssembly().Location
-        Dim myDir = System.IO.Directory.GetParent(exeFile).FullName
         Dim solutionDir = My.Application.Directory
         For i = 1 To 3
             solutionDir = System.IO.Directory.GetParent(solutionDir).FullName
@@ -19,6 +17,10 @@ Public Class frmMain
 
         pluginDirs.Add(solutionDir)
 
+
+        ' set the application data directory. 
+        ' plug-in settings will be loaded from here when wee scan
+        ahcActivityHost.SetDataDirectory(My.Application.AppDataDir)
 
         ' load all plug-ins located in the solution
         ahcActivityHost.ScanForPlugins(pluginDirs.ToArray())

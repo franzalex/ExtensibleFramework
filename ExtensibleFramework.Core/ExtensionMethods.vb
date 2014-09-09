@@ -3,6 +3,22 @@ Imports System.Linq
 
 ''' <summary>Contains extension methods for extending classes. (.NET 3.5+ only)</summary>
 Friend Module ExtensionMethods
+    ''' <summary>Convenience method for creating a KeyValuePair.</summary>
+    ''' <typeparam name="TKey">The type of the key.</typeparam>
+    ''' <typeparam name="TValue">The type of the value.</typeparam>
+    ''' <param name="key">The key of the KVP.</param>
+    ''' <param name="value">The value of the KVP.</param>
+    ''' <returns>A <see cref="KeyValuePair(Of TKey, TValue)"/> from the provided values.</returns>
+    <Extension(), DebuggerStepThrough()>
+    Public Function CreateKVP(Of TKey, TValue)(key As TKey, value As TValue) As KeyValuePair(Of TKey, TValue)
+        Return New KeyValuePair(Of TKey, TValue)(key, value)
+    End Function
+
+    ''' <summary>Gets the file name without the extension.</summary>
+    <Extension(), DebuggerStepThrough()>
+    Public Function FileNameWithoutExtension(fi As System.IO.FileInfo) As String
+        Return fi.Name.Remove(fi.Name.Length - fi.Extension.Length)
+    End Function
 
     ''' <summary>
     ''' Indicates whether the specified string is a null reference 
@@ -141,6 +157,15 @@ Friend Module ExtensionMethods
         Next
 
         Return returnVal.Replace("  ", " ")
+    End Function
+
+    ''' <summary>Splits the given text into lines.</summary>
+    ''' <param name="text">The text to be split.</param>
+    ''' <param name="removeEmptyLines">Removes empty lines if set to <c>true</c>.</param>
+    <Extension(), DebuggerStepThrough()>
+    Public Function SplitLines(text As String, Optional removeEmptyLines As Boolean = True) As String()
+        Dim splitOptions = If(removeEmptyLines, StringSplitOptions.RemoveEmptyEntries, StringSplitOptions.None)
+        Return text.Split({vbCr, vbLf, vbCrLf}, splitOptions)
     End Function
 
     ''' <summary>

@@ -10,6 +10,8 @@ Public Class ActivityHostControl
     Dim activities As Dictionary(Of String, ActivityControl)
     Dim _currentActivity As ActivityControl
     Dim _activityResult As Object
+    Dim _dataDir As String
+    Dim settingsDir As String
 
     Public Sub New()
         Me.Size = Me.GetPreferredSize(New Size(0, 0))
@@ -120,6 +122,23 @@ Public Class ActivityHostControl
         Return foundActivites.FirstOrDefault()
     End Function
 
+    ''' <summary>Loads the plug-in settings.</summary>
+    Private Sub LoadPluginSettings()
+        ' ensure the settings directory exists
+        If _dataDir.IsNullOrEmpty() OrElse Not System.IO.Directory.Exists(settingsDir) Then Return
+
+        ' list all JSON files in the settings directory and load the associated 
+        ' settings if the associated plug-in is loaded
+        For Each file In System.IO.Directory.GetFiles(settingsDir, "*.json")
+            Dim uniqueID = New System.IO.FileInfo(file).FileNameWithoutExtension()
+
+            If _plugins.ContainsKey(uniqueID) Then
+                _plugins(uniqueID).Settings = New Settings(file)
+            End If
+        Next
+
+    End Sub
+
     ''' <summary>
     ''' Retrieves the size of a rectangular area into which a control can be fitted.
     ''' </summary>
@@ -204,6 +223,25 @@ Public Class ActivityHostControl
         End If
     End Function
 
+    ''' <summary>
+    ''' Saves the settings of plug-ins loaded in this <see cref="ActivityHostControl"/>.
+    ''' </summary>
+    Public Sub SavePluginSettings()
+        If Not System.IO.Directory.Exists(settingsDir) Then
+            System.IO.Directory.CreateDirectory(settingsDir)
+        End If
+
+        For Each plugin In _plugins.Values
+            Dim fileName = System.IO.Path.Combine(settingsDir, plugin.UniqueID & ".json")
+
+            Dim metadata = "{0} v{1}".FormatWith(plugin.Name, plugin.Version)
+            Dim line = New String("-"c, metadata.Length)
+
+            plugin.Settings.Metadata = String.Join(vbCrLf, {line, metadata, line})
+            plugin.Settings.SaveAs(fileName)
+        Next
+    End Sub
+
     ''' <summary>Scans the specified directories for plug-ins.</summary>
     ''' <param name="directories">The directories to scan for plug-ins.</param>
     Public Sub ScanForPlugins(ParamArray directories As String())
@@ -243,6 +281,17 @@ Public Class ActivityHostControl
                 activities.Remove(aID)
             Next
         End If
+
+        Me.LoadPluginSettings()
+    End Sub
+
+    ''' <summary>Sets the data directory.</summary>
+    ''' <param name="dataDir">The data directory.</param>
+    Public Sub SetDataDirectory(dataDir As String)
+        _dataDir = dataDir
+        settingsDir = System.IO.Path.Combine(_dataDir, "PluginPrefs")
+
+        If _plugins.Any() Then Me.LoadPluginSettings()
     End Sub
 
     ' event handlers
@@ -348,9 +397,12 @@ Public Class ActivityHostControl
                 _currentActivity.StopActivity(True)
             Else
                 ' set cancel to true to prevent form from closing
-                e.Cancel = False
+                e.Cancel = True
             End If
         End If
+
+        ' form is going to close. save plug-in settings
+        If e.Cancel = False Then Me.SavePluginSettings()
     End Sub
 
 End Class
