@@ -1,9 +1,28 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace SalesManager
 {
     internal static class ExtensionMethods
     {
+        /// <summary>
+        /// Concatenates a specified <see cref="System.String"/> enumerable by placing the specified
+        /// separator <see cref="System.String"/> between each element, yielding a single concatenated 
+        /// string.
+        /// </summary>
+        /// <param name="separator">
+        /// The separator to place between the elements of <paramref name="value"/>.
+        /// </param>
+        /// <param name="value">The string enumerable to be concatenated.</param>
+        /// <returns>
+        /// A <see cref="System.String"/> consisting of the elements of <paramref name="value"/> 
+        /// interspersed with the separator string.
+        /// </returns>
+        public static string Join(this string separator, IEnumerable<string> value)
+        {
+            return string.Join(separator, value.ToArray());
+        }
+
         /// <summary>
         /// Indicates whether the specified string is <c>null</c> or an <see cref="System.String.Empty"/> string.
         /// </summary>
