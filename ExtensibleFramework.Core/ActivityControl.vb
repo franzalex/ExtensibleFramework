@@ -25,7 +25,7 @@ Public Class ActivityControl
     Public Event Stopping As EventHandler(Of StoppingEventArgs)
     ''' <summary>Occurs when the <see cref="ActivityControl"/> is stopped.</summary>
     ''' <remarks>
-    ''' This event is raised when the <see cref="ActivityHostControl"/> detemines that this
+    ''' This event is raised when the <see cref="ActivityHostControl"/> determines that this
     ''' <see cref="ActivityControl"/> is no longer the active activity.
     ''' </remarks>
     Public Event [Stop] As EventHandler(Of StopEventArgs)
