@@ -1,17 +1,21 @@
-﻿using ExtensibleFramework.Core;
+﻿using Dinofage.Data;
+using ExtensibleFramework.Core;
 using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace SalesManager
 {
     public class SalesManager : ExtensibleFramework.Core.Plugin
     {
+        private Dinofage.Data.ConnectionString _connStr;
         private List<ActivityLauncher> _mainActivities;
         private Dictionary<string, Func<ActivityControl>> activityCreator;
-
         /// <summary>Initializes a new instance of the <see cref="SalesManager" /> class.</summary>
         public SalesManager()
         {
+            SalesManager.Instance = this;
+
             // create an index of activities in this plug-in and their launchers
             activityCreator = new Dictionary<string, Func<ActivityControl>>();
             _mainActivities = new List<ActivityLauncher>();
@@ -41,6 +45,29 @@ namespace SalesManager
         public override string Name
         {
             get { return "Sales Manager"; }
+        }
+
+        /// <summary>Gets an instance of the SalesManager class.</summary>
+        internal static SalesManager Instance { get; private set; }
+
+        /// <summary>Gets the connection string.</summary>
+        /// <value>The connection string.</value>
+        internal ConnectionString ConnectionString
+        {
+            get
+            {
+                // prompt for the database if no connection string is specified
+                var dataSource = _connStr != null ? _connStr.DataSource : this.Settings.GetValue<string>("DataSource", "");
+
+                if (dataSource.IsNullOrEmpty() || !System.IO.File.Exists(dataSource.Trim('"')))
+                {
+                    dataSource = PromptForDatabase();
+                    _connStr = new OleDbConnectionString(OleDbConnectionString.OleDbProviders.AceOleDb,
+                        dataSource);
+                }
+
+                return _connStr;
+            }
         }
 
         /// <summary>
@@ -74,10 +101,10 @@ namespace SalesManager
         /// <remarks>
         /// If a non-empty string is returned and 
         /// <seealso cref="M:ExtensibleFramework.Core.Plugin.SupportsCommand(System.String)" /> is
-        /// <c>true</c>, the activity whose ID is returned will be initialized with <paramref
-        /// name="command" />. On the other hand, if an empty string is returned, <paramref
-        /// name="command" /> will be passed to 
-        /// <see cref="M:ExtensibleFramework.Core.Plugin.RunCommand(System.String)" />.
+        /// <c>true</c>, the activity whose ID is returned will be initialized with 
+        /// <paramref name="command" />. 
+        /// On the other hand, if an empty string is returned, <paramref name="command" /> will be 
+        /// passed to  <see cref="M:ExtensibleFramework.Core.Plugin.RunCommand(System.String)" />.
         /// </remarks>
         public override string GetActivityForCommand(string command)
         {
@@ -96,13 +123,30 @@ namespace SalesManager
 
         /// <summary>Gets a value indicating whether the plug-in supports the specified command.</summary>
         /// <param name="command">The command to be evaluated.</param>
-        /// <returns>
-        ///   <c>true</c> if the plug-in supports the specified command; else <c>false</c>.
-        /// </returns>
+        /// <returns><c>true</c> if the plug-in supports the specified command; else <c>false</c>.</returns>
         public override bool SupportsCommand(string command)
         {
             // we don't support any command yet
             return false;
+        }
+
+        /// <summary>Prompts the user for the database.</summary>
+        /// <returns>The user-specified path to the SalesManager database.</returns>
+        private string PromptForDatabase()
+        {
+            MessageBox.Show("The Sales Manager database could not be located.\r\n" +
+                            "Please select the location of the database.", "Could not locate database");
+            using (var ofd = new OpenFileDialog() {
+                Filter = "Sales Manager Database|SalesManager.accdb|Access Database|*.accdb|All Files|*.*",
+                Multiselect = false,
+                Title = "Select Sales Manager database"
+            })
+            {
+                if (ofd.ShowDialog() == DialogResult.OK)
+                    return ofd.FileName.Trim('"');
+                else
+                    return "";
+            }
         }
     }
 }
