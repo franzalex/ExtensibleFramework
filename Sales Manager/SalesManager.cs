@@ -21,11 +21,11 @@ namespace SalesManager
             _mainActivities = new List<ActivityLauncher>();
 
             foreach (var ctor in new Func<ActivityControl>[] { () => new ClientList() })
-                using (var ahc = ctor.Invoke())
+                using (var ac = ctor.Invoke())
                 {
-                    activityCreator.Add(ahc.ID, ctor);
-                    if (ahc.Launchers != null)
-                        _mainActivities.AddRange(ahc.Launchers);
+                    activityCreator.Add(ac.ID, ctor);
+                    if (ac.Launchers != null)
+                        _mainActivities.AddRange(ac.Launchers);
                 }
         }
 
