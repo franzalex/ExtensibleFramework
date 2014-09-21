@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExtensibleFramework.Core;
+using System;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -11,6 +12,21 @@ namespace SalesManager
             InitializeComponent();
 
             this.Load += ClientList_Load;
+        }
+
+        /// <summary>Gets the ActivityLaunchers that can be used to start this control.</summary>
+        /// <value>
+        /// An array of <see cref="T:ExtensibleFramework.Core.ActivityLauncher" /> that can be used
+        /// to start this control.
+        /// </value>
+        public override ExtensibleFramework.Core.ActivityLauncher[] Launchers
+        {
+            get
+            {
+                return new[] {
+                    new ActivityLauncher(this.ID, "Client List", this.Icon, "View and edit client list.")
+                };
+            }
         }
 
         /// <summary>Gets the text associated with this control.</summary>
