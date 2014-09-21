@@ -24,8 +24,8 @@ namespace SalesManager
                 using (var ahc = ctor.Invoke())
                 {
                     activityCreator.Add(ahc.ID, ctor);
-                    if (ahc.Launcher != null)
-                        _mainActivities.Add(ahc.Launcher);
+                    if (ahc.Launchers != null)
+                        _mainActivities.AddRange(ahc.Launchers);
                 }
         }
 
