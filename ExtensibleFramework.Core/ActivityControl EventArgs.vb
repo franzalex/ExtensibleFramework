@@ -35,19 +35,19 @@ Public Class StoppingEventArgs
     End Sub
 End Class
 
-''' <summary>Provides data for the <seealso cref="ActivityControl.Stop"/> event.</summary>
-Public Class StopEventArgs
+''' <summary>Provides data for the <seealso cref="ActivityControl.Stopped"/> event.</summary>
+Public Class StoppedEventArgs
     Inherits EventArgs
 
     Dim _cleanup As Boolean
 
-    ''' <summary>Initializes a new instance of the <see cref="StopEventArgs" /> class.</summary>
+    ''' <summary>Initializes a new instance of the <see cref="StoppedEventArgs" /> class.</summary>
     ''' <param name="cleanup">
     ''' If set to <c>true</c> a clean up should be performed in the 
-    ''' <see cref="ActivityControl.Stop" /> event.
+    ''' <see cref="ActivityControl.Stopped" /> event.
     ''' </param>
     Public Sub New(cleanup As Boolean)
-        _CleanUp = cleanup
+        _cleanup = cleanup
     End Sub
 
     ''' <summary>
@@ -91,7 +91,7 @@ Public Class RestartEventArgs
 
     ''' <summary>Gets the state to restore the <see cref="ActivityControl"/> to.</summary>
     ''' <remarks>
-    ''' The value of this property is what was previously saved to the <seealso cref="StopEventArgs.State"/>
+    ''' The value of this property is what was previously saved to the <seealso cref="StoppedEventArgs.State"/>
     ''' property in the <seealso cref="E:ActivityControl.Stopping"/> event.
     ''' </remarks>
     Public ReadOnly Property State As Object

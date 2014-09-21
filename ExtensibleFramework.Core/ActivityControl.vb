@@ -28,7 +28,7 @@ Public Class ActivityControl
     ''' This event is raised when the <see cref="ActivityHostControl"/> determines that this
     ''' <see cref="ActivityControl"/> is no longer the active activity.
     ''' </remarks>
-    Public Event [Stop] As EventHandler(Of StopEventArgs)
+    Public Event Stopped As EventHandler(Of StoppedEventArgs)
     ''' <summary>
     ''' Occurs when the <see cref="ActivityControl"/> is started after it has been previously stopped.
     ''' </summary>
@@ -117,8 +117,8 @@ Public Class ActivityControl
 
     ''' <summary>Raises the <see cref="E:Stopped" /> event.</summary>
     ''' <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-    Protected Overridable Sub OnStop(e As StopEventArgs)
-        RaiseEvent Stop(Me, e)
+    Protected Overridable Sub OnStopped(e As StoppedEventArgs)
+        RaiseEvent Stopped(Me, e)
     End Sub
 
     ''' <summary>Raises the <see cref="E:Restarted" /> event.</summary>
@@ -157,8 +157,8 @@ Public Class ActivityControl
     ''' <param name="performCleanup">A resource cleanup will be performed if set to <c>true</c>.</param>
     ''' <returns>The state of the control prior to stopping</returns>
     Public Function StopActivity(performCleanup As Boolean) As Object
-        Dim e = New StopEventArgs(performCleanup)
-        Me.OnStop(e)
+        Dim e = New StoppedEventArgs(performCleanup)
+        Me.OnStopped(e)
         Return e.State
     End Function
 
