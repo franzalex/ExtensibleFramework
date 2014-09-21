@@ -35,10 +35,12 @@ Public Class HomeActivity
         Next
     End Sub
 
-    Private Sub HomeActivity_Stop(sender As Object, e As StopEventArgs) Handles Me.Stop
+    Private Sub HomeActivity_Stopped(sender As Object, e As StoppedEventArgs) Handles Me.Stopped
         ' release resources by clearing all the loaded items
-        iml32px.Images.Clear()
-        lvwHomeItems.Items.Clear()
+        If e.CleanUp Then
+            iml32px.Images.Clear()
+            lvwHomeItems.Items.Clear()
+        End If
     End Sub
 
     Private Sub lvwHomeItems_DoubleClick(sender As Object, e As EventArgs) Handles lvwHomeItems.DoubleClick
