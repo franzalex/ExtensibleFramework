@@ -46,6 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddEditPartner.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AddEditPartner.Designer.cs">
+      <DependentUpon>AddEditPartner.cs</DependentUpon>
+    </Compile>
     <Compile Include="ClientList.cs">
       <SubType>UserControl</SubType>
     </Compile>
