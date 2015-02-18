@@ -7,9 +7,14 @@ Public Class ActivityControl
     Inherits Windows.Forms.UserControl
 
     Dim _hostControl As ActivityHostControl
+    Dim _settings As Core.Settings
+    Friend pluginID As String
+    Dim _state As ActivityState
 
-    ''' <summary>Occurs when the <see cref="ActivityControl"/> is started.</summary>
-    Public Event Start As EventHandler(Of StartEventArgs)
+    ''' <summary>Occurs when the <see cref="ActivityControl"/> is being initialized.</summary>
+    Public Event Initializing As EventHandler(Of InitializingEventArgs)
+    ''' <summary>Occurs <see cref="ActivityControl"/> has been initialized and is visible to the user.</summary>
+    Public Event Started As EventHandler
     ''' <summary>Occurs when the <see cref="ActivityControl"/> is suspended.</summary>
     ''' <remarks>
     ''' This event is raised when the <see cref="ActivityHostControl"/> is minimized or loses focus.
@@ -82,57 +87,97 @@ Public Class ActivityControl
         End Get
     End Property
 
-    ''' <summary>Gets the text associated with this control.</summary>
-    ''' <returns>The text associated with this control.</returns>
-    Public Overridable Shadows ReadOnly Property Text As String
+    ''' <summary>Gets the plugin's settings.</summary>
+    Public Property Settings As Settings
         Get
-            Return ""
+            Return _settings
+        End Get
+        Protected Friend Set(value As Settings)
+            _settings = value
+        End Set
+    End Property
+
+    ''' <summary>Gets the state of the <see cref="ActivityControl"/>.</summary>
+    Public ReadOnly Property State As ActivityState
+        Get
+            Return _state
         End Get
     End Property
 
+    ''' <summary>Gets the text associated with this control.</summary>
+    ''' <returns>The text associated with this control.</returns>
+    Public Overridable Shadows Property Text As String
+        Get
+            Return If(MyBase.Text.IsNullOrEmpty(), Me.Name, MyBase.Text)
+        End Get
+        Protected Set(value As String)
+            MyBase.Text = value
+        End Set
+    End Property
+
 #Region "Event Raisers"
+    ''' <summary>Raises the <see cref="E:Initializing" /> event.</summary>
+    ''' <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+    Protected Overridable Sub OnInitializing(e As InitializingEventArgs)
+        _state = ActivityState.Initializing
+        RaiseEvent Initializing(Me, e)
+        _state = ActivityState.Initialized
+    End Sub
+
     ''' <summary>Raises the <see cref="E:Started" /> event.</summary>
     ''' <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-    Protected Overridable Sub OnStart(e As StartEventArgs)
-        RaiseEvent Start(Me, e)
+    Protected Overridable Sub OnStarted(e As EventArgs)
+        _state = ActivityState.Running
+        RaiseEvent Started(Me, e)
     End Sub
 
     ''' <summary>Raises the <see cref="E:Suspended" /> event.</summary>
     ''' <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
     Protected Overridable Sub OnPaused(e As EventArgs)
+        _state = ActivityState.Paused
         RaiseEvent Paused(Me, e)
     End Sub
 
     ''' <summary>Raises the <see cref="E:Resumed" /> event.</summary>
     ''' <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
     Protected Overridable Sub OnResumed(e As EventArgs)
+        _state = ActivityState.Running
         RaiseEvent Resumed(Me, e)
     End Sub
 
     ''' <summary>Raises the <see cref="E:Stopping" /> event.</summary>
     ''' <param name="e">The <see cref="StoppingEventArgs"/> instance containing the event data.</param>
     Protected Overridable Sub OnStopping(e As StoppingEventArgs)
+        _state = ActivityState.Stopping
         RaiseEvent Stopping(Me, e)
     End Sub
 
     ''' <summary>Raises the <see cref="E:Stopped" /> event.</summary>
     ''' <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
     Protected Overridable Sub OnStopped(e As StoppedEventArgs)
+        _state = ActivityState.Stopped
         RaiseEvent Stopped(Me, e)
     End Sub
 
     ''' <summary>Raises the <see cref="E:Restarted" /> event.</summary>
     ''' <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
     Protected Overridable Sub OnRestart(e As RestartEventArgs)
+        _state = ActivityState.Restarting
         RaiseEvent Restart(Me, e)
+        _state = ActivityState.Running
     End Sub
 #End Region
 
 #Region "State changing methods"
-    ''' <summary>Starts the activity.</summary>
+    ''' <summary>Initializes the activity.</summary>
     ''' <param name="initializationCommand">The initialization command.</param>
-    Public Sub StartActivity(initializationCommand As String)
-        Me.OnStart(New StartEventArgs(initializationCommand))
+    Public Sub Initialize(initializationCommand As String)
+        Me.OnInitializing(New InitializingEventArgs(initializationCommand))
+    End Sub
+
+    ''' <summary>Starts the activity.</summary>
+    Public Sub StartActivity()
+        Me.OnStarted(EventArgs.Empty)
     End Sub
 
     ''' <summary>Pauses the activity.</summary>
@@ -187,3 +232,32 @@ Public Class ActivityControl
         Loop
     End Sub
 End Class
+
+Public Enum ActivityState
+    ''' <summary>Indicates that the <see cref="ActivityControl"/> is initializing.</summary>
+    Initializing
+    ''' <summary>
+    ''' Indicates that the <see cref="ActivityControl" /> has been initialized 
+    ''' but has not been displayed to the user.
+    ''' </summary>
+    Initialized
+    ''' <summary>Indicates that the <see cref="ActivityControl"/> is currently active.</summary>
+    Running
+    ''' <summary>
+    ''' Indicates that the <see cref="ActivityControl" /> has been paused due to its
+    ''' parent form losing focus.
+    ''' </summary>
+    Paused
+    ''' <summary>
+    ''' Indicates that the <see cref="ActivityControl" /> is being restarted 
+    ''' after being stopped previously.
+    ''' </summary>
+    Restarting
+    ''' <summary>Indicates that the <see cref="ActivityControl" /> is being stopped.</summary>
+    Stopping
+    ''' <summary>
+    ''' Indicates that the <see cref="ActivityControl" /> has been stopped
+    ''' and is no longer visible to the user.
+    ''' </summary>
+    Stopped
+End Enum

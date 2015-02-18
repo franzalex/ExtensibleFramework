@@ -68,14 +68,16 @@ Public Class ActivityLauncher
 
     ''' <summary>Gets or sets the activity initialization command.</summary>
     ''' <value>
-    ''' The command that will be used to initialize the associated <see cref="ActivityControl" /> on launch.
+    ''' The command that will be used to initialize the associated <see cref="ActivityControl" /> on 
+    ''' launch.
     ''' </value>
     ''' <exception cref="System.InvalidOperationException">
     ''' The InitializationCommand property cannot be set more than once.
     ''' </exception>
     ''' <remarks>
     ''' The value of this property passed sent to the <see cref="ActivityControl"/> in the 
-    ''' <see cref="ActivityControl.Start"/> event via the <see cref="StartEventArgs.InitializationCommand"/>.
+    ''' <see cref="ActivityControl.Initializing"/> event via the 
+    ''' <see cref="InitializingEventArgs.InitializationCommand"/>.
     ''' </remarks>
     Public Property InitializationCommand As String
         Get

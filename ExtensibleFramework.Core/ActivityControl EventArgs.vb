@@ -1,10 +1,11 @@
-﻿''' <summary>Provides data for the <see cref="ActivityControl.Start"/> event.</summary>
-Public Class StartEventArgs
+﻿''' <summary>Provides data for the <see cref="ActivityControl.Initializing"/> event.</summary>
+<DebuggerStepThrough()>
+Public Class InitializingEventArgs
     Inherits EventArgs
 
     Dim _initCmd As String
 
-    ''' <summary>Initializes a new instance of the <see cref="StartEventArgs"/> class.</summary>
+    ''' <summary>Initializes a new instance of the <see cref="InitializingEventArgs"/> class.</summary>
     ''' <param name="initializationCommand">The initialization command.</param>
     Public Sub New(initializationCommand As String)
         _initCmd = initializationCommand
@@ -20,6 +21,7 @@ Public Class StartEventArgs
 End Class
 
 ''' <summary>Provides data for the <see cref="ActivityControl.Stopping"/> event.</summary>
+<DebuggerStepThrough()>
 Public Class StoppingEventArgs
     Inherits System.ComponentModel.CancelEventArgs
 
@@ -36,6 +38,7 @@ Public Class StoppingEventArgs
 End Class
 
 ''' <summary>Provides data for the <seealso cref="ActivityControl.Stopped"/> event.</summary>
+<DebuggerStepThrough()>
 Public Class StoppedEventArgs
     Inherits EventArgs
 
@@ -51,7 +54,7 @@ Public Class StoppedEventArgs
     End Sub
 
     ''' <summary>
-    ''' Gets a value indicating whether resource-intensive objects should be cleaned up.
+    ''' Gets a value indicating whether large objects should be cleaned up.
     ''' </summary>
     ''' <value><c>true</c> if a clean up should be performed; otherwise, <c>false</c>.</value>
     ''' <remarks>
@@ -78,6 +81,7 @@ Public Class StoppedEventArgs
 End Class
 
 ''' <summary>Provides data for the <see cref="ActivityControl.Restart"/> event.</summary>
+<DebuggerStepThrough()>
 Public Class RestartEventArgs
     Inherits EventArgs
 
