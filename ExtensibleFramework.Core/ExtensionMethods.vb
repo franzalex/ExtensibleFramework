@@ -163,9 +163,28 @@ Friend Module ExtensionMethods
     ''' <param name="text">The text to be split.</param>
     ''' <param name="removeEmptyLines">Removes empty lines if set to <c>true</c>.</param>
     <Extension(), DebuggerStepThrough()>
-    Public Function SplitLines(text As String, Optional removeEmptyLines As Boolean = True) As String()
-        Dim splitOptions = If(removeEmptyLines, StringSplitOptions.RemoveEmptyEntries, StringSplitOptions.None)
-        Return text.Split({vbCr, vbLf, vbCrLf}, splitOptions)
+    Public Function SplitLines(text As String, Optional removeEmptyLines As Boolean = True) As IEnumerable(Of String)
+        Return text.SplitLines(If(removeEmptyLines, 0, Integer.MaxValue))
+    End Function
+
+    ''' <summary>Splits the given text into lines.</summary>
+    ''' <param name="text">The text to be split.</param>
+    ''' <param name="maxEmptyLines">Maximum number of continuous empty lines to return in the output.</param>
+    <Extension(), DebuggerStepThrough()>
+    Public Iterator Function SplitLines(text As String, maxEmptyLines As Integer) As IEnumerable(Of String)
+        Dim emptyLineCount = 0
+
+        For Each line In text.Split({vbCrLf, vbCr, vbLf}, StringSplitOptions.None)
+            If line.IsNullOrEmpty() Then
+                emptyLineCount += 1
+            Else
+                emptyLineCount = 0
+            End If
+
+            If emptyLineCount <= maxEmptyLines Then
+                Yield line
+            End If
+        Next
     End Function
 
     ''' <summary>
