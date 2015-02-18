@@ -11,6 +11,7 @@ Public Class Settings
     Inherits Dictionary(Of String, Object)
 
     Private Const fileDescriptor As String = "Extensible Application Framework Settings File, Format Version "
+    Private Const metadataTag As String = "| Metadata |"
 
     Dim _autoSave As Boolean = True
     Dim _fileName As String = ""
@@ -136,7 +137,7 @@ Public Class Settings
 
     ''' <summary>Gets or sets metadata written to the settings file on save.</summary>
     <ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)> _
-    Public Property Metadata As String
+    Public Property Metadata As String = ""
 
     'public methods
 
@@ -157,7 +158,7 @@ Public Class Settings
     ''' <param name="defaultValue">Default value to be returned if the setting does not exist.</param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Function GetValue(Of T)(ByVal name As String, ByVal defaultValue As T) As T
+    Public Function GetValue(Of T)(ByVal name As String, Optional ByVal defaultValue As T = Nothing) As T
         If Me.ContainsKey(name) Then
             Try
                 Return CType(Me.Item(name), T)
@@ -228,6 +229,9 @@ Public Class Settings
                             MyBase.Add(kvp.Key, kvp.Value)
                         Next
 
+                        ' load the saved metadata
+                        Me.ReadMetadata(descriptor.Value)
+
                         'all operations successful
                         Return True
                     Else
@@ -279,18 +283,15 @@ Public Class Settings
         Try
             ' save if user wants to save an empty file or if data exists in the dictionary
             If saveEmptyFile OrElse Me.Keys.Any() Then
-                Using fileStream As New IO.FileStream(fileName, IO.FileMode.Create)
-
-                    ' do save on a worker thread. prevents application from freezing during saves
-                    ThreadPool.QueueUserWorkItem(Sub(o As Object)
-                                                     With System.Threading.Thread.CurrentThread
-                                                         Dim bgState = .IsBackground
-                                                         .IsBackground = False
-                                                         Me.SaveInternal(fileStream)
-                                                         .IsBackground = bgState
-                                                     End With
-                                                 End Sub)
-                End Using
+                ' do save on a worker thread. prevents application from freezing during saves
+                ThreadPool.QueueUserWorkItem(Sub(o As Object)
+                                                 With System.Threading.Thread.CurrentThread
+                                                     Dim bgState = .IsBackground
+                                                     .IsBackground = False
+                                                     Me.SaveInternal(fileName)
+                                                     .IsBackground = bgState
+                                                 End With
+                                             End Sub)
             End If
 
         Catch ex As Exception
@@ -310,7 +311,7 @@ Public Class Settings
 
         If result Then
             Dim verLine = (From l In descriptor.SplitLines()
-                           Let line = l.TrimStart(" /*".ToCharArray)
+                           Let line = l.TrimStart(" /*".ToCharArray())
                            Where line.StartsWith(fileDescriptor)
                            Select line).FirstOrDefault()
 
@@ -324,9 +325,9 @@ Public Class Settings
         Return result
     End Function
 
-    Private Sub SaveInternal(stream As System.IO.Stream)
+    Private Sub SaveInternal(fileName As String)
         SyncLock Me
-            Using sw As New System.IO.StreamWriter(stream)
+            Using sw As New System.IO.StreamWriter(fileName)
 
                 Dim fileInfo = My.Application.Info
                 Dim descriptor = New List(Of String) From {
@@ -334,7 +335,16 @@ Public Class Settings
                     "{0} v{1}".FormatWith(fileInfo.ProductName, fileInfo.Version),
                     ""
                 }
-                descriptor.AddRange(Me.Metadata.Split({vbCr, vbLf}, StringSplitOptions.RemoveEmptyEntries))
+
+                If Not Me.Metadata.IsNullOrEmpty() Then
+                    ' maximum metadata line length
+                    Dim maxLen = Me.Metadata.SplitLines().Max(Function(l) l.Length)
+                    maxLen = Math.Max(maxLen - metadataTag.Length, 12)
+
+                    descriptor.Add(metadataTag & New String(">"c, maxLen))
+                    descriptor.AddRange(Me.Metadata.SplitLines(maxEmptyLines:=2))
+                    descriptor.Add(New String("<"c, maxLen) & metadataTag)
+                End If
 
 
                 ' add descriptor in an escaped comment (/* ... */)
@@ -360,4 +370,16 @@ Public Class Settings
             End Using
         End SyncLock
     End Sub
+
+    ''' <summary>Reads the metadata.</summary>
+    ''' <param name="descriptor">The file descriptor from which the metadata will be read.</param>
+    Private Sub ReadMetadata(descriptor As String)
+        Dim lines = descriptor.SplitLines(removeEmptyLines:=False).
+                               Select(Function(l) l.TrimStart(" */".ToCharArray())).
+                               SkipWhile(Function(l) Not l.StartsWith(metadataTag)).Skip(1).
+                               TakeWhile(Function(l) Not l.EndsWith(metadataTag))
+
+        Me.Metadata = String.Join(vbCrLf, lines.ToArray())
+    End Sub
+
 End Class
