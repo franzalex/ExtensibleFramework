@@ -28,8 +28,7 @@ Partial Class frmMain
         Me.tsbHome = New System.Windows.Forms.ToolStripButton()
         Me.tslPluginTitle = New System.Windows.Forms.ToolStripLabel()
         Me.tsbPluginTool = New System.Windows.Forms.ToolStripDropDownButton()
-        Me.tsmAddPluginFile = New System.Windows.Forms.ToolStripMenuItem()
-        Me.tsmPluginsAddDir = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmEditPluginsDirs = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsPluginSep1 = New System.Windows.Forms.ToolStripSeparator()
         Me.tsmPluginsRescan = New System.Windows.Forms.ToolStripMenuItem()
         Me.ahcActivityHost = New ExtensibleFramework.Core.ActivityHostControl()
@@ -78,37 +77,30 @@ Partial Class frmMain
         'tsbPluginTool
         '
         Me.tsbPluginTool.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
-        Me.tsbPluginTool.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmAddPluginFile, Me.tsmPluginsAddDir, Me.tsPluginSep1, Me.tsmPluginsRescan})
+        Me.tsbPluginTool.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmEditPluginsDirs, Me.tsPluginSep1, Me.tsmPluginsRescan})
         Me.tsbPluginTool.Image = Global.ExtensibleFramework.App.My.Resources.Resources.plugin
         Me.tsbPluginTool.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsbPluginTool.Name = "tsbPluginTool"
         Me.tsbPluginTool.Size = New System.Drawing.Size(75, 22)
         Me.tsbPluginTool.Text = "Plugins"
         '
-        'tsmAddPluginFile
+        'tsmEditPluginsDirs
         '
-        Me.tsmAddPluginFile.Image = Global.ExtensibleFramework.App.My.Resources.Resources.plugin_add
-        Me.tsmAddPluginFile.Name = "tsmAddPluginFile"
-        Me.tsmAddPluginFile.Size = New System.Drawing.Size(169, 22)
-        Me.tsmAddPluginFile.Text = "Add Plugin File"
-        '
-        'tsmPluginsAddDir
-        '
-        Me.tsmPluginsAddDir.Image = Global.ExtensibleFramework.App.My.Resources.Resources.folder_add
-        Me.tsmPluginsAddDir.Name = "tsmPluginsAddDir"
-        Me.tsmPluginsAddDir.Size = New System.Drawing.Size(169, 22)
-        Me.tsmPluginsAddDir.Text = "Add Plugin Folder"
+        Me.tsmEditPluginsDirs.Image = Global.ExtensibleFramework.App.My.Resources.Resources.folder_add
+        Me.tsmEditPluginsDirs.Name = "tsmEditPluginsDirs"
+        Me.tsmEditPluginsDirs.Size = New System.Drawing.Size(181, 22)
+        Me.tsmEditPluginsDirs.Text = "Edit Plugin Folders..."
         '
         'tsPluginSep1
         '
         Me.tsPluginSep1.Name = "tsPluginSep1"
-        Me.tsPluginSep1.Size = New System.Drawing.Size(166, 6)
+        Me.tsPluginSep1.Size = New System.Drawing.Size(178, 6)
         '
         'tsmPluginsRescan
         '
         Me.tsmPluginsRescan.Image = Global.ExtensibleFramework.App.My.Resources.Resources.folder_find
         Me.tsmPluginsRescan.Name = "tsmPluginsRescan"
-        Me.tsmPluginsRescan.Size = New System.Drawing.Size(169, 22)
+        Me.tsmPluginsRescan.Size = New System.Drawing.Size(181, 22)
         Me.tsmPluginsRescan.Text = "Rescan Plugins"
         '
         'ahcActivityHost
@@ -117,7 +109,7 @@ Partial Class frmMain
         Me.ahcActivityHost.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.ahcActivityHost.Location = New System.Drawing.Point(0, 25)
         Me.ahcActivityHost.Name = "ahcActivityHost"
-        Me.ahcActivityHost.Size = New System.Drawing.Size(480, 335)
+        Me.ahcActivityHost.Size = New System.Drawing.Size(480, 360)
         Me.ahcActivityHost.TabIndex = 0
         Me.ahcActivityHost.Text = "ActivityHostControl1"
         '
@@ -125,12 +117,13 @@ Partial Class frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(480, 360)
+        Me.ClientSize = New System.Drawing.Size(480, 385)
         Me.Controls.Add(Me.ahcActivityHost)
         Me.Controls.Add(tsMain)
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.MinimumSize = New System.Drawing.Size(496, 398)
+        Me.MinimumSize = New System.Drawing.Size(496, 423)
         Me.Name = "frmMain"
+        Me.StartPosition = FormStartPosition.CenterScreen
         Me.Text = "Extensible Framework"
         tsMain.ResumeLayout(False)
         tsMain.PerformLayout()
@@ -143,8 +136,7 @@ Partial Class frmMain
     Private WithEvents ahcActivityHost As ExtensibleFramework.Core.ActivityHostControl
     Private WithEvents tslPluginTitle As System.Windows.Forms.ToolStripLabel
     Private WithEvents tsbPluginTool As System.Windows.Forms.ToolStripDropDownButton
-    Private WithEvents tsmAddPluginFile As System.Windows.Forms.ToolStripMenuItem
-    Private WithEvents tsmPluginsAddDir As System.Windows.Forms.ToolStripMenuItem
+    Private WithEvents tsmEditPluginsDirs As System.Windows.Forms.ToolStripMenuItem
     Private WithEvents tsPluginSep1 As System.Windows.Forms.ToolStripSeparator
     Private WithEvents tsmPluginsRescan As System.Windows.Forms.ToolStripMenuItem
 

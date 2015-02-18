@@ -2,28 +2,24 @@
 
 Public Class frmMain
 
-    Private pluginDirs As New HashSet(Of String) 'using HashSet prevents adding the same item twice
+    Private pluginDirs As New HashSet(Of String)(StringComparer.CurrentCultureIgnoreCase) ' HashSet prevents adding same item twice
 
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles Me.Load
         ' you have to manually listen to the activity host control's navigation event
         AddHandler ahcActivityHost.Navigator.HasNavigated, AddressOf ActivityHost_HasNavigated
 
 
-        ' get the solution directory (typically 3 directories up from debug output)
-        Dim solutionDir = My.Application.Directory
-        For i = 1 To 3
-            solutionDir = System.IO.Directory.GetParent(solutionDir).FullName
+        ' read the plugin directories from the settings
+        For Each path In My.Application.Settings.GetValue("pluginPaths", New String() {})
+            pluginDirs.Add(path)
         Next
 
-        pluginDirs.Add(solutionDir)
-
-
         ' set the application data directory. 
-        ' plug-in settings will be loaded from here when wee scan
+        ' plugin settings will be loaded from here when wee scan
         ahcActivityHost.SetDataDirectory(My.Application.AppDataDir)
 
-        ' load all plug-ins located in the solution
-        ahcActivityHost.ScanForPlugins(pluginDirs.ToArray())
+        ' load all plugins located in the solution
+        tsmPluginsRescan.PerformClick()
 
 
         ' find an activity for the go-home command
@@ -34,7 +30,7 @@ Public Class frmMain
         tsbBack.Enabled = ahcActivityHost.Navigator.CanGoBack
         tsbHome.Enabled = ahcActivityHost.CurrentActivity.ID <> "ExtensibleFramework.Home.HomeActivity"
 
-        tslPluginTitle.Text = "Location: " & ahcActivityHost.CurrentActivity.Text
+        tslPluginTitle.Text = "Location: " & e.NewLocation.Text ' ahcActivityHost.CurrentActivity.Text
     End Sub
 
     Private Sub tsbBack_Click(sender As Object, e As EventArgs) Handles tsbBack.Click
@@ -48,23 +44,34 @@ Public Class frmMain
     End Sub
 
     Private Sub tsmPluginsRescan_Click(sender As Object, e As EventArgs) Handles tsmPluginsRescan.Click
+
+#If AutoAddSolutionDir Then  ' add the solution directory if the app is being debugged
+        ' get the solution directory (typically 3 directories up from debug output)
+        Dim solutionDir = My.Application.Directory
+        For i = 1 To 3
+            solutionDir = System.IO.Directory.GetParent(solutionDir).FullName
+        Next
+        pluginDirs.Add(solutionDir)
+#End If
+
         ahcActivityHost.ScanForPlugins(pluginDirs.ToArray())
     End Sub
 
-    Private Sub tsmPluginsAddDir_Click(sender As Object, e As EventArgs) Handles tsmPluginsAddDir.Click
-        Using fbd As New FolderBrowserDialog() With {.SelectedPath = My.Application.Directory,
-                                                     .Description = "Select plug-in directory."}
-            If fbd.ShowDialog() = Windows.Forms.DialogResult.OK Then
-                pluginDirs.Add(fbd.SelectedPath)
+    Private Sub tsmPluginsAddDir_Click(sender As Object, e As EventArgs) Handles tsmEditPluginsDirs.Click
+        Using dlg = New dlgPluginPaths()
 
-                ahcActivityHost.ScanForPlugins(pluginDirs.ToArray())
+            If dlg.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                pluginDirs = New HashSet(Of String)(dlg.PluginDirectories, StringComparer.CurrentCultureIgnoreCase)
+                My.Application.Settings.SetValue("pluginPaths", pluginDirs.ToArray())
+
+                tsmPluginsRescan.PerformClick()
             End If
         End Using
     End Sub
 
-    Private Sub tsmAddPluginFile_Click(sender As Object, e As EventArgs) Handles tsmAddPluginFile.Click
+    Private Sub tsmAddPluginFile_Click(sender As Object, e As EventArgs)
         Using ofd As New OpenFileDialog() With {.InitialDirectory = My.Application.Directory,
-                                                .Filter = "Plug-in Info File|(*.info.txt)"}
+                                                .Filter = "Plugin Info File|(*.info.txt)"}
             If ofd.ShowDialog() = Windows.Forms.DialogResult.OK Then
                 pluginDirs.Add(System.IO.Directory.GetParent(ofd.FileName).FullName)
 
