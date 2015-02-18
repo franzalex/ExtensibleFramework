@@ -24,13 +24,13 @@ Partial Class HomeActivity
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.lvwHomeItems = New System.Windows.Forms.ListView()
-        Me.iml32px = New System.Windows.Forms.ImageList(Me.components)
+        Me.iml48px = New System.Windows.Forms.ImageList(Me.components)
         Me.SuspendLayout()
         '
         'lvwHomeItems
         '
         Me.lvwHomeItems.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lvwHomeItems.LargeImageList = Me.iml32px
+        Me.lvwHomeItems.LargeImageList = Me.iml48px
         Me.lvwHomeItems.Location = New System.Drawing.Point(0, 0)
         Me.lvwHomeItems.MultiSelect = False
         Me.lvwHomeItems.Name = "lvwHomeItems"
@@ -39,11 +39,11 @@ Partial Class HomeActivity
         Me.lvwHomeItems.UseCompatibleStateImageBehavior = False
         Me.lvwHomeItems.View = System.Windows.Forms.View.Tile
         '
-        'iml32px
+        'iml48px
         '
-        Me.iml32px.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit
-        Me.iml32px.ImageSize = New System.Drawing.Size(32, 32)
-        Me.iml32px.TransparentColor = System.Drawing.Color.Transparent
+        Me.iml48px.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit
+        Me.iml48px.ImageSize = New System.Drawing.Size(48, 48)
+        Me.iml48px.TransparentColor = System.Drawing.Color.Transparent
         '
         'HomeActivity
         '
@@ -56,6 +56,6 @@ Partial Class HomeActivity
 
     End Sub
     Private WithEvents lvwHomeItems As System.Windows.Forms.ListView
-    Private WithEvents iml32px As System.Windows.Forms.ImageList
+    Private WithEvents iml48px As System.Windows.Forms.ImageList
 
 End Class
