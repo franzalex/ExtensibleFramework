@@ -4,7 +4,8 @@ Imports System.ComponentModel
 Imports System.Linq
 
 ''' <summary>Class used to represent a series of navigator.</summary>
-<DebuggerStepThrough()> Public Class Navigator
+<DebuggerStepThrough()>
+Public Class Navigator
     Inherits CollectionBase
 
 #Region "Internal Classes"
@@ -140,7 +141,7 @@ Imports System.Linq
         End Get
     End Property
 
-    ''' <summary>Gets the current loction in the navigator list.</summary>
+    ''' <summary>Gets the current location in the navigator list.</summary>
     Public ReadOnly Property CurrentLocation As Location
         Get
             If CurrentLocationIndex < 0 OrElse CurrentLocationIndex > List.Count - 1 Then
@@ -169,12 +170,12 @@ Imports System.Linq
         End Set
     End Property
 
-    '''<summary>Gets the Locations that preceed the current in the Navigator list.</summary>
+    '''<summary>Gets the Locations that precede the current in the Navigator list.</summary>
     Public ReadOnly Property BackItems As Location()
         Get
             Dim arr = Me.InnerList.ToArray
             'convert the array [of object] to Location and then
-            '  take the elements that preceed the current item.
+            '  take the elements that precede the current item.
             Return arr.Select(Function(x) DirectCast(x, Location)).Take(curLocIndex).Reverse.ToArray
         End Get
     End Property
@@ -309,7 +310,7 @@ Imports System.Linq
     Public Function GoBack(ByVal steps As Integer) As Location
         If Me.List.Count = 0 Then
             'don't navigate an empty list
-            Throw New Exception("Navigaition list is empty!")
+            Throw New Exception("Navigation list is empty!")
 
         Else
             'go backward by the specified number of steps, ensuring we don't exceed the min # of items
@@ -321,19 +322,19 @@ Imports System.Linq
             RaiseEvent IsNavigating(Me, navArgs)
 
             If navArgs.Cancel = True Then
-                'navigation was cancelled
+                'navigation was canceled
                 Return CurrentLocation
             Else
-                'navigation was not cancelled
+                'navigation was not canceled
 
                 'raise the navigation event
                 Dim curLoc = If(curLocIndex.IsInRange(0, List.Count - 1), Item(curLocIndex), Nothing)
                 Dim newLoc = If(newLocIndex.IsInRange(0, List.Count - 1), Item(newLocIndex), Nothing)
                 Dim e = New LocationChangedEventArgs(curLoc, newLoc, -Math.Abs(steps))
 
+                curLocIndex = newLocIndex
                 RaiseEvent HasNavigated(Me, e)
 
-                curLocIndex = newLocIndex
             End If
 
             Return Item(curLocIndex)
@@ -374,20 +375,19 @@ Imports System.Linq
             RaiseEvent IsNavigating(Me, navArgs)
 
             If navArgs.Cancel = True Then
-                'navigation was cancelled
+                'navigation was canceled
                 Return CurrentLocation
             Else
-                'navigation was not cancelled
+                'navigation was not canceled
 
                 ' raise the navigation event
                 Dim curLoc = If(curLocIndex.IsInRange(0, List.Count - 1), Item(curLocIndex), Nothing)
                 Dim newLoc = If(newLocIndex.IsInRange(0, List.Count - 1), Item(newLocIndex), Nothing)
                 Dim e = New LocationChangedEventArgs(curLoc, newLoc, Math.Abs(steps))
 
+                curLocIndex = newLocIndex
                 RaiseEvent HasNavigated(Me, e)
 
-                ' set the current location
-                curLocIndex = newLocIndex
             End If
 
             Return Item(curLocIndex)
@@ -413,22 +413,21 @@ Imports System.Linq
             Else
                 'otherwise clear the locations after the current and append the specified location.
 
-                'clear each item after the the current location
+                'clear each item after the current location
                 Do While List.Count - 1 > curLocIndex
                     List.RemoveAt(curLocIndex + 1)
                 Loop
 
                 'add the new location to the end of the list and go to it
-                List.Add(destination)
-                Dim newLocIndex = curLocIndex + 1
+                Dim newLocIndex = List.Add(destination)
                 Dim curLoc = If(curLocIndex.IsInRange(0, List.Count - 1), Item(curLocIndex), Nothing)
                 Dim newLoc = If(newLocIndex.IsInRange(0, List.Count - 1), Item(newLocIndex), Nothing)
 
                 'raise the navigation event
+                curLocIndex = newLocIndex
                 RaiseEvent HasNavigated(Me, New LocationChangedEventArgs(curLoc, newLoc, 1))
 
                 'return the current location (which happens to be the destination passed)
-                curLocIndex = newLocIndex
                 Return Item(curLocIndex)
             End If
         End If
