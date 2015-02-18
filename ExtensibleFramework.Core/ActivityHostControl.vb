@@ -1,5 +1,6 @@
 ﻿Imports System.ComponentModel
 Imports Size = System.Drawing.Size
+Imports Regex = System.Text.RegularExpressions.Regex
 
 Public Class ActivityHostControl
     Inherits System.Windows.Forms.Panel
@@ -46,7 +47,7 @@ Public Class ActivityHostControl
         End Get
     End Property
 
-    ''' <summary>Gets the plug-ins detected by the control.</summary>
+    ''' <summary>Gets the plugins detected by the control.</summary>
     Public ReadOnly Property Plugins As IEnumerable(Of Plugin)
         Get
             Return _plugins.Values.ToList().AsReadOnly()
@@ -81,10 +82,36 @@ Public Class ActivityHostControl
 
     ' methods
 
+    ''' <summary>Adds the plugin version information to metadata.</summary>
+    ''' <param name="plugin">The plugin whose version info will be added to <paramref name="metadata"/>.</param>
+    ''' <param name="metadata">The metadata to be updated with the plugin version info.</param>
+    Private Function AddVersionInfoToMetadata(plugin As Plugin, metadata As String) As String
+        Dim verInfo = "{0} v{1}".FormatWith(plugin.Name, plugin.Version)
+        Dim verLine = Regex.Match(metadata, plugin.Name & " v\d+.\d+.\d+.\d+")
+
+        If verLine.Success Then
+            Dim lastVer = Regex.Match(verLine.Value, "v\d+.\d+.\d+.\d+")
+
+            If lastVer.Value.Substring(1) <> plugin.Version.ToString() Then
+                ' matched version info line but last version is different from plugin version
+                Return metadata.Replace(verLine.Value, verInfo)
+            Else
+                ' everything is okay
+                Return metadata
+            End If
+
+        Else
+            ' version info line is not present
+            Return verInfo & vbCrLf & vbCrLf & metadata
+        End If
+
+
+    End Function
+
     ''' <summary>Finds the <see cref="ActivityControl" /> with the specified ActivityID.</summary>
     ''' <param name="activityID">The ID of the <seealso cref="ActivityControl" /> to return.</param>
     ''' <param name="searchAllPlugins">
-    ''' If set to <c>true</c> all plug-ins will be searched for a match. Otherwise just cached 
+    ''' If set to <c>true</c> all plugins will be searched for a match. Otherwise just cached 
     ''' activities will be searched for a match.
     ''' </param>
     ''' <returns></returns>
@@ -92,12 +119,15 @@ Public Class ActivityHostControl
         ' create an instance of the activity if one hasn't been created already
         If Not activities.ContainsKey(activityID) AndAlso searchAllPlugins Then
             Dim foundActivites = From plugin In _plugins.Values
-                                 Let activity = plugin.CreateActivity(activityID)
-                                 Where activity IsNot Nothing
-                                 Select activity
+                                 Let activityCtrl = plugin.CreateActivity(activityID)
+                                 Where activityCtrl IsNot Nothing
+                                 Select New With {.Control = activityCtrl, .PluginID = plugin.UniqueID}
 
             If foundActivites.Any() Then
-                activities.Add(activityID, foundActivites.First())
+                Dim result1 = foundActivites.First()
+                result1.Control.pluginID = result1.PluginID
+                result1.Control.Settings = _plugins(result1.PluginID).Settings
+                activities.Add(activityID, result1.Control)
             End If
         End If
 
@@ -122,19 +152,17 @@ Public Class ActivityHostControl
         Return foundActivites.FirstOrDefault()
     End Function
 
-    ''' <summary>Loads the plug-in settings.</summary>
+    ''' <summary>Loads the plugin settings.</summary>
     Private Sub LoadPluginSettings()
         ' ensure the settings directory exists
-        If _dataDir.IsNullOrEmpty() OrElse Not System.IO.Directory.Exists(settingsDir) Then Return
+        If _dataDir.IsNullOrEmpty() Then Return
+        If Not System.IO.Directory.Exists(settingsDir) Then System.IO.Directory.CreateDirectory(settingsDir)
 
-        ' list all JSON files in the settings directory and load the associated 
-        ' settings if the associated plug-in is loaded
-        For Each file In System.IO.Directory.GetFiles(settingsDir, "*.json")
-            Dim uniqueID = New System.IO.FileInfo(file).FileNameWithoutExtension()
-
-            If _plugins.ContainsKey(uniqueID) Then
-                _plugins(uniqueID).Settings = New Settings(file)
-            End If
+        ' load the settings for the plugin if it exists otherwise create a new settings file
+        For Each pluginID In _plugins.Keys
+            Dim filename = System.IO.Path.Combine(settingsDir, pluginID & ".json")
+            Dim plugin = _plugins(pluginID)
+            plugin.Settings = New Settings(filename) With {.Metadata = AddVersionInfoToMetadata(plugin, .Metadata)}
         Next
 
     End Sub
@@ -224,7 +252,7 @@ Public Class ActivityHostControl
     End Function
 
     ''' <summary>
-    ''' Saves the settings of plug-ins loaded in this <see cref="ActivityHostControl"/>.
+    ''' Saves the settings of plugins loaded in this <see cref="ActivityHostControl"/>.
     ''' </summary>
     Public Sub SavePluginSettings()
         If Not System.IO.Directory.Exists(settingsDir) Then
@@ -232,30 +260,28 @@ Public Class ActivityHostControl
         End If
 
         For Each plugin In _plugins.Values
-            Dim fileName = System.IO.Path.Combine(settingsDir, plugin.UniqueID & ".json")
-
-            Dim metadata = "{0} v{1}".FormatWith(plugin.Name, plugin.Version)
-            Dim line = New String("-"c, metadata.Length)
-
-            plugin.Settings.Metadata = String.Join(vbCrLf, {line, metadata, line})
-            plugin.Settings.SaveAs(fileName)
+            ' save only those plugins whose autoSave has been turned off
+            If plugin.Settings.AutoSave = False Then
+                plugin.Settings.Metadata = AddVersionInfoToMetadata(plugin, plugin.Settings.Metadata)
+                plugin.Settings.Save()
+            End If
         Next
     End Sub
 
-    ''' <summary>Scans the specified directories for plug-ins.</summary>
-    ''' <param name="directories">The directories to scan for plug-ins.</param>
+    ''' <summary>Scans the specified directories for plugins.</summary>
+    ''' <param name="directories">The directories to scan for plugins.</param>
     Public Sub ScanForPlugins(ParamArray directories As String())
         ' scan logic:
         '  1. go through each directory
         '  2. get all files whose names end with .info.txt
-        '  3. read each line from the file (typically 1 line only indicating which DLL is the plug-in)
+        '  3. read each line from the file (typically 1 line only indicating which DLL is the plugin)
         '  4. strip quotation marks and spaces from the line
-        '  5. filter non blanks and assign it as the plug-in file name
-        '  6. set the plug-in directory (the same directory as the current .info.txt file)
-        '  7. set the plug-in file name (full file name)
+        '  5. filter non blanks and assign it as the plugin file name
+        '  6. set the plugin directory (the same directory as the current .info.txt file)
+        '  7. set the plugin file name (full file name)
         '  8. filter for files that exist only
-        '  9. filter distinct plug-in files
-        ' 10. search for and create a plug-in from the file
+        '  9. filter distinct plugin files
+        ' 10. search for and retrieve the plugins from the file
         Dim scanResult = From directory In directories
                          From file In IO.Directory.GetFiles(directory, "*.info.txt", IO.SearchOption.AllDirectories)
                          From line In System.IO.File.ReadAllLines(file)
@@ -265,9 +291,11 @@ Public Class ActivityHostControl
                          Let pluginFile = System.IO.Path.Combine(pluginDir, pluginName)
                          Where System.IO.File.Exists(pluginFile)
                          Select pluginFile Distinct
-                         Select ExtensibleFramework.Core.Plugin.FromFile(pluginFile)
+                         From plugin In ExtensibleFramework.Core.Plugin.FromFile(pluginFile)
+                         Select plugin
 
-        ' if there were any plug-ins found, update our plug-in dictionary to those ones found
+
+        ' if there were any plugins found, update our plugin dictionary to those ones found
         If scanResult.Any() Then
             _plugins = scanResult.ToDictionary(Function(k) k.UniqueID)
 
@@ -297,7 +325,12 @@ Public Class ActivityHostControl
     ' event handlers
 
     Private Sub Navigator_IsNavigating(sender As Navigator, e As Navigator.LocationChangingEventArgs)
-        e.Cancel = _currentActivity IsNot Nothing AndAlso _currentActivity.CanStopActivity()
+        If _currentActivity IsNot Nothing Then
+            If Not _currentActivity.CanStopActivity() Then
+                ' cancel navigation because current activity does not want to be stopped
+                e.Cancel = True
+            End If
+        End If
 
         If Not e.Cancel AndAlso Me.Navigator.CurrentLocation IsNot Nothing Then
             ' get the current location info or create one if none exists
@@ -328,22 +361,26 @@ Public Class ActivityHostControl
         If TryCast(e.NewLocation.Tag, LocationInfo).AssignToAndReturn(locInfo) IsNot Nothing AndAlso
             FindActivityByID(locInfo.ActivityID).AssignToAndReturn(newActivity) IsNot Nothing Then
 
+            ' initialize the new activity
+            newActivity.Initialize(locInfo.InitCmd)
+
             ' pause all drawing and replace the current activity with the new one
             Me.SuspendLayout()
             Me.Controls.Clear()
             Me.Controls.Add(newActivity)
             newActivity.Dock = Windows.Forms.DockStyle.Fill
 
+            ' resume drawing the control
+            Me.ResumeLayout()
+            Me.PerformLayout()
+
             ' start or restart the activity control based on the navigation direction
             If e.Direction = Core.Navigator.NavigationDirection.Back Then
                 newActivity.RestartActivity(locInfo.State)
             Else
-                newActivity.StartActivity(locInfo.InitCmd)
+                newActivity.StartActivity()
             End If
-
-            ' resume drawing the control
-            Me.ResumeLayout()
-            Me.PerformLayout()
+            newActivity.Focus()
 
             'set the text and of the new location
             e.NewLocation.Text = newActivity.Text
@@ -359,8 +396,8 @@ Public Class ActivityHostControl
     Private Sub ActivityHostControl_ParentChanged(sender As Object, e As EventArgs) Handles Me.ParentChanged
         If parentForm IsNot Nothing Then
             'remove existing event handlers
-            RemoveHandler parentForm.LostFocus, AddressOf ParentForm_LostFocus
-            RemoveHandler parentForm.GotFocus, AddressOf ParentForm_GotFocus
+            RemoveHandler parentForm.Activated, AddressOf ParentForm_Active
+            RemoveHandler parentForm.Deactivate, AddressOf ParentForm_Inactive
             RemoveHandler parentForm.FormClosing, AddressOf ParentForm_FormClosing
         End If
 
@@ -369,23 +406,25 @@ Public Class ActivityHostControl
 
         If Me.Parent IsNot Nothing And parentForm IsNot Nothing Then
             ' add event handlers to control the activities in sync with the parent form's events
-            AddHandler parentForm.LostFocus, AddressOf ParentForm_LostFocus
-            AddHandler parentForm.GotFocus, AddressOf ParentForm_GotFocus
+            AddHandler parentForm.Activated, AddressOf ParentForm_Active
+            AddHandler parentForm.Deactivate, AddressOf ParentForm_Inactive
             AddHandler parentForm.FormClosing, AddressOf ParentForm_FormClosing
         End If
     End Sub
 
-    Private Sub ParentForm_LostFocus(sender As Object, e As EventArgs)
-        ' pause activity when parent form loses focus
-        If _currentActivity IsNot Nothing Then
-            _currentActivity.PauseActivity()
+    Private Sub ParentForm_Active(sender As Object, e As EventArgs)
+        ' resume activity when parent form gets focus
+        If _currentActivity IsNot Nothing AndAlso
+           _currentActivity.State <> ActivityState.Running Then
+            _currentActivity.ResumeActivity()
         End If
     End Sub
 
-    Private Sub ParentForm_GotFocus(sender As Object, e As EventArgs)
-        ' resume activity when parent form gets focus
-        If _currentActivity IsNot Nothing Then
-            _currentActivity.ResumeActivity()
+    Private Sub ParentForm_Inactive(sender As Object, e As EventArgs)
+        ' pause activity when parent form loses focus
+        If _currentActivity IsNot Nothing AndAlso
+           _currentActivity.State <> ActivityState.Paused Then
+            _currentActivity.PauseActivity()
         End If
     End Sub
 
@@ -401,7 +440,7 @@ Public Class ActivityHostControl
             End If
         End If
 
-        ' form is going to close. save plug-in settings
+        ' form is going to close. save plugin settings
         If e.Cancel = False Then Me.SavePluginSettings()
     End Sub
 
