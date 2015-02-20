@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Readme</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+</head>
+<body>
+<h1>Implementing Extensible Application Framework Plugins</h1>
+<p>This document contains instructions on how to create, debug and deploy plugins
+for the Extensible Application Framework.</p>
+<h2>Create and Configure Project</h2>
+<h3>Project References</h3>
+<p>Plugins are class libraries (.DLL files) whose member classes inherit classes 
+from the <code>ExtensibleFramework.Core</code> namespace. This requires, therefore, that
+you add a reference to the <code>ExtensibleFramework.Core.dll</code> file in your
+project.</p>
+<p>Follow the process of adding a reference to a project in Visual Studio for the
+language you are developing in to add a reference to the 
+<code>ExtensibleFramework.Core.dll</code> file.<br />
+Optionally, set the <em>Copy To Local</em> of the reference to <strong>False</strong>. Though the
+Extensible Framework program is designed to load libraries only when required,
+doing this will greatly improve the performance of the application.</p>
+<h3>The INFO.TXT File</h3>
+<p>In order to determine which class libraries are plugins, the extensible 
+framework application scans all directories for files whose names match the 
+expression *.info.txt (e.g. <em>myFirstPlugin.info.txt</em>). </p>
+<p>Each line of this INFO.TXT file should contain the  file name of a plugin 
+relative to the directory in which the INFO.TXT file is located but preferably
+in the same directory as the plugin's .DLL file.</p>
+<h4>Creating the INFO.TXT File</h4>
+<p>Though it is fairly easy to create the INFO.TXT file manually, an easier and
+more robust way of doing this is to have Visual Studio generate the file when
+building the project using build events.</p>
+<ol>
+<li>Right click on the project in Solution Explorer and click on Properties.</li>
+<li>Go to the <em>Compile</em> tab and then click on the <em>Build Events</em> button.</li>
+<li>
+Enter the following in the Post-build event command line text box:<br />
+<code>CMD.EXE /C ECHO &quot;$(TargetFileName)&quot; &gt; &quot;$(TargetDir)$(TargetName).info.txt&quot;</code>
+</li>
+<li>Click on OK to save the configuration.</li>
+</ol>
+<p>With this, an INFO.TXT file with the same name as your output file in the build
+output directory. The INFO.TXT file will also be automatically populated with 
+the file name of the build output (the DLL file containing the plugin).</p>
+<h2>Creating the Plugin</h2>
+<p>All of the classes required to create a fully-functional plugin are in the 
+<code>ExtensibleFramework.Core</code> namespace. Creating a plugin is just a matter of
+inheriting these classes and modifying the inherited methods to suit your needs.</p>
+<h3>The plugin descriptor class</h3>
+<p>The plugin descriptor class serves as the hub of all interaction with your 
+plugin. Ideally, each plugin assembly will have only one plugin descriptor 
+class. However, it is possible to put multiple plugin descriptor classes, and by
+extension, multiple plugins in one assembly.</p>
+<p>Each plugin descriptor must inherit the <code>ExtensibleFramework.Core.Plugin</code> 
+class and implement properties and methods that specify among other things, the 
+name, ID and activities present within the plugin.</p>
+<h4>Creating a plugin descriptor class</h4>
+<ol>
+<li>Click on <code>Project &gt; Add Class...</code> and add a new class to your project.</li>
+<li>
+Add the following line after the class definition line to inherit the base 
+   plugin descriptor class.<br />
+    <code>Inherits ExtensibleFramework.Core.Plugin</code>  
+
+</li>
+<li>Complete the code that was automatically generated when you inherited the
+   <code>Plugin</code> class.<br />
+   Optionally, you can override additional methods and properties to fine-tune
+   the way your plugin descriptor (and hence your plugin) works.</li>
+</ol>
+<p>The sample implementation of a plugin descriptor class is as shown below.</p>
+<pre><code>Imports ExtensibleFramework.Core
+
+Public Class DemoPlugin
+    Inherits ExtensibleFramework.Core.Plugin
+
+
+    Dim launchers() As ActivityLauncher
+
+    ''' &lt;summary&gt;Gets the description of the plugin.&lt;/summary&gt;
+    Public Overrides ReadOnly Property Description As String
+        Get
+            Return &quot;Sample Extensible Application Framework plugin&quot;
+        End Get
+    End Property
+
+    ''' &lt;summary&gt;Gets the name of the plugin.&lt;/summary&gt;
+    Public Overrides ReadOnly Property Name As String
+        Get
+            Return &quot;Demo Plugin&quot;
+        End Get
+    End Property
+
+    ''' &lt;summary&gt;Gets the launchers for launching activities directly for this plugin.&lt;/summary&gt;
+    Public Overrides ReadOnly Property ActivityLaunchers As IEnumerable(Of ActivityLauncher)
+        Get
+            If launchers.Length = 0 Then
+                ' create two launchers for the two main activities in the plugin
+
+                Dim launchers(2) As ActivityLauncher
+
+                launchers(0) = New ActivityLauncher(&quot;Demo.Plugin.NotepadActivity&quot;,
+                                                    &quot;Notepad&quot;, My.Resources.TextEditor)
+                launchers(1) = New ActivityLauncher(&quot;Demo.Plugin.TimerActivity&quot;,
+                                                    &quot;Timer&quot;, My.Resources.Clock)
+            End If
+
+            Return launchers
+        End Get
+    End Property
+
+    ''' &lt;summary&gt;
+    ''' Creates the activity associated with the specified &lt;paramref name=&quot;activityID&quot; /&gt;.
+    ''' &lt;/summary&gt;
+    ''' &lt;param name=&quot;activityID&quot;&gt;The activity ID of the activity to be created.&lt;/param&gt;
+    ''' &lt;returns&gt;An instance of &lt;seealso cref=&quot;ActivityControl&quot; /&gt;.&lt;/returns&gt;
+    Public Overrides Function CreateActivity(activityID As String) As ActivityControl
+
+        ' create an instance of the activity control whose ID is specified
+        Select Case activityID
+            Case &quot;Demo.Plugin.TimerActivity&quot;
+                Return New TimerActivity()
+
+            Case &quot;Demo.Plugin.NotepadActivity&quot;
+                Return New TextEditorActivity()
+
+            Case Else
+                Return Nothing
+        End Select
+    End Function
+
+    ''' &lt;summary&gt;
+    ''' Gets the ID of the &lt;see cref=&quot;ActivityControl&quot; /&gt; to use for executing the specified command.
+    ''' &lt;/summary&gt;
+    ''' &lt;param name=&quot;command&quot;&gt;The command to be evaluated.&lt;/param&gt;
+    ''' &lt;returns&gt;
+    ''' The ID of the &lt;see cref=&quot;ActivityControl&quot; /&gt; to use for executing &lt;paramref name=&quot;command&quot; /&gt;.
+    ''' &lt;/returns&gt;&lt;remarks&gt;
+    ''' The &lt;paramref name=&quot;command&quot; /&gt; parameter will be will be passed to the
+    ''' &lt;see cref=&quot;Plugin.RunCommand&quot; /&gt; method if a &lt;c&gt;null&lt;/c&gt; or empty string is returned.
+    ''' &lt;/remarks&gt;
+    Public Overrides Function GetActivityForCommand(command As String) As String
+        ' try to determine if a given command can be run
+
+        If command.StartsWith(&quot;run-timer&quot;) Then
+            Return &quot;Demo.Plugin.TimerActivity&quot;
+        ElseIf command.StartsWith(&quot;edit-text&quot;) Then
+            Return &quot;Demo.Plugin.NotepadActivity&quot;
+        Else
+            Return &quot;&quot;
+        End If
+    End Function
+
+    ''' &lt;summary&gt;Runs the specified command.&lt;/summary&gt;
+    ''' &lt;param name=&quot;command&quot;&gt;The command to be run.&lt;/param&gt;
+    ''' &lt;returns&gt;The result produced from running the command.&lt;/returns&gt;
+    Public Overrides Function RunCommand(command As String) As Object
+        ' no commands are run outside activities so return Nothing for every command that is passed.
+        Return Nothing
+    End Function
+
+    ''' &lt;summary&gt;
+    ''' Gets a value indicating whether the plugin supports the specified command.
+    ''' &lt;/summary&gt;
+    ''' &lt;param name=&quot;command&quot;&gt;The command to be evaluated.&lt;/param&gt;
+    ''' &lt;returns&gt;
+    '''   &lt;c&gt;true&lt;/c&gt; if the plugin supports the specified command; else &lt;c&gt;false&lt;/c&gt;.
+    ''' &lt;/returns&gt;
+    Public Overrides Function SupportsCommand(command As String) As Boolean
+        ' shell off to the GetActivityForCommand() method to determine
+        ' whether the plugin supports the given command.
+
+        Return Not String.IsNullOrEmpty(Me.GetActivityForCommand(command))
+    End Function
+End Class
+</code></pre>
+
+<h3>Activities</h3>
+<p>An activity is a container control hosting one or more controls to perform a 
+specific task. </p>
+<p>Activities inherit the <code>ExtensibleFramework.Core.ActivityControl</code> class.
+This base class implements a set of events and properties that can be used to
+interact with the user, other activities in the plugin, as well as activities in
+other plugins.</p>
+<h4>Creating an Activity</h4>
+<ol>
+<li>Click on <code>Project &gt; Add New Item...</code>. </li>
+<li>Select <strong>Inherited User Control</strong> (Installed &gt; Common Items &gt; Windows Forms),
+   enter the name of the activity and click on <strong>Add</strong>.</li>
+<li>In the Inheritance Picker dialog box that opens, select <strong>ActivityControl</strong>
+   component (namespace <strong>ExtensibleFramework.Core</strong>) and then click on <strong>OK</strong>.</li>
+<li>Add controls in the design view to suit your purpose.</li>
+<li>Switch to the code view and handle the events you want.</li>
+</ol>
+<p>The code below outlines the basic events that can be implemented by an activity
+in order to interact with the Extensible Application Framework program.</p>
+<pre><code>Public Class TimerActivity
+    Inherits ExtensibleFramework.Core.ActivityControl
+
+    Private Sub TimerActivity_Initializing(sender As Object, e As ExtensibleFramework.Core.InitializingEventArgs) Handles Me.Initializing
+        ' the Initializing event is raised when the control is being prepared to be displayed.
+        ' it is recommended to load and set default values of controls here.
+        ' resource intensive operations should be reserved for the ActivityControl.Started event
+
+        ' initialize the activity text in code; 
+        ' it cannot be set in design mode
+        Me.Text = &quot;Sample Activity&quot;
+    End Sub
+
+    Private Sub TimerActivity_Paused(sender As Object, e As EventArgs) Handles Me.Paused
+        ' the Paused event is raised when the control's window is minimized or loses focus
+        ' pause activities such as rendering and screen updates here 
+        '   since the user is not likely to see or interact with them
+    End Sub
+
+    Private Sub TimerActivity_Restart(sender As Object, e As ExtensibleFramework.Core.RestartEventArgs) Handles Me.Restart
+        ' The Restart event is raised when the activity is started after being previously stopped.
+        ' The most likely way this event will be raised is when the user navigates backwards to
+        '   ActivityControl.Stopped event will be returned in the RestartedEventArgs.State property.
+        '   You can use this to restore the state of your activity.
+    End Sub
+
+    Private Sub TimerActivity_Resumed(sender As Object, e As EventArgs) Handles Me.Resumed
+        ' the Resumed event is raised when the control's window regains focus
+        '   or is restored after being minimized
+        ' Resume rendering and screen updates here for user interaction
+    End Sub
+
+    Private Sub TimerActivity_Started(sender As Object, e As EventArgs) Handles Me.Started
+        ' The Started event is raised when the control has been initialized and is displayed to the 
+        '   user for interaction.
+    End Sub
+
+    Private Sub TimerActivity_Stopped(sender As Object, e As ExtensibleFramework.Core.StoppedEventArgs) Handles Me.Stopped
+        ' This event is raised when this activity has been stopped and removed from the window.
+        ' A stopped activity may or may not be resumed so it is recommended to save volatile values 
+        '   here. You should also stop all processing in anticipation of termination.
+        ' The state of some controls such as caret position, scroll position and focused controls
+        '   can be persisted in the StoppedEventArgs.State property in the event of a restart.
+        ' The StoppedEventArgs.CleanUp property indicates whether large objects should be disposed of
+        '   or not. It is set to True when the user navigates backwards and may not return to this
+        '   activity.
+
+        ' save the timer's running state
+        e.State = stopwatch.IsRunning
+
+        stopwatch.Stop()
+        tmrUpdate.Stop()
+        Me.Settings.SetValue(&quot;timer.Ticks&quot;, oldTime.Add(stopwatch.Elapsed).Ticks)
+    End Sub
+
+    Private Sub TimerActivity_Stopping(sender As Object, e As ExtensibleFramework.Core.StoppingEventArgs) Handles Me.Stopping
+        ' Raised just before the activity is stopped. It allows you to prompt user to save open documents, etc.
+        ' Setting the StoppingEventArgs.Cancel property to True prevents the activity from being stopped.
+    End Sub
+        '   this activity.
+    ' Values that were persisted in the StoppedEventArgs.State property during the 
+End Class
+</code></pre>
+
+
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->
