@@ -283,6 +283,7 @@ Public Class ActivityHostControl
         '  9. filter distinct plugin files
         ' 10. search for and retrieve the plugins from the file
         Dim scanResult = From directory In directories
+                         Where System.IO.Directory.Exists(directory)
                          From file In IO.Directory.GetFiles(directory, "*.info.txt", IO.SearchOption.AllDirectories)
                          From line In System.IO.File.ReadAllLines(file)
                          Let pluginName = line.Trim(" '""".ToCharArray())
@@ -292,7 +293,7 @@ Public Class ActivityHostControl
                          Where System.IO.File.Exists(pluginFile)
                          Select pluginFile Distinct
                          From plugin In ExtensibleFramework.Core.Plugin.FromFile(pluginFile)
-                         Select plugin
+                         Select plugin Distinct
 
 
         ' if there were any plugins found, update our plugin dictionary to those ones found

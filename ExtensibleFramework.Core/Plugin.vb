@@ -154,4 +154,27 @@ Public MustInherit Class Plugin
 
     End Function
 
+    ' overridden methods
+
+    ''' <summary>Determines whether the specified <see cref="System.Object" />, is equal to this instance.</summary>
+    ''' <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
+    ''' <returns>
+    '''   <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
+    ''' </returns>
+    Public Overrides Function Equals(obj As Object) As Boolean
+        ' ensure both objects aren't null and the object being compared is a Plugin
+        Return (Me IsNot Nothing) AndAlso (obj IsNot Nothing) AndAlso
+               (TypeOf obj Is Plugin) AndAlso
+               (DirectCast(obj, Plugin).UniqueID.Equals(Me.UniqueID))
+    End Function
+
+    ''' <summary>Returns a hash code for this instance.</summary>
+    ''' <returns>
+    '''   A hash code for this instance, suitable for use in hashing algorithms and data structures like a
+    '''   hash table.
+    ''' </returns>
+    Public Overrides Function GetHashCode() As Integer
+        Return Me.UniqueID.GetHashCode()
+    End Function
+
 End Class
