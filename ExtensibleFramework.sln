@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ExtensibleFramework.Core", "ExtensibleFramework.Core\ExtensibleFramework.Core.vbproj", "{9328442E-3CD8-4A64-882E-8FD868592501}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ExtensibleFramework.App", "ExtensibleFramework.App\ExtensibleFramework.App.vbproj", "{6FAA06E5-FCF0-46DA-9C18-1C0CD511B574}"
@@ -15,6 +17,7 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "PluginDemo", "PluginDemo\Pl
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E153513C-513C-48A4-992D-5566F34A64E5}"
 	ProjectSection(SolutionItems) = preProject
+		ExtensibleFramework.sln.vsspell = ExtensibleFramework.sln.vsspell
 		Readme.md = Readme.md
 	EndProjectSection
 EndProject
