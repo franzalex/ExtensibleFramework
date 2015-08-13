@@ -117,7 +117,7 @@ Partial Class frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(480, 385)
+        Me.ClientSize = New System.Drawing.Size(640, 480)
         Me.Controls.Add(Me.ahcActivityHost)
         Me.Controls.Add(tsMain)
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!)

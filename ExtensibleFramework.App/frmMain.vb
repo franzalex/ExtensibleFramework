@@ -45,7 +45,7 @@ Public Class frmMain
 
     Private Sub tsmPluginsRescan_Click(sender As Object, e As EventArgs) Handles tsmPluginsRescan.Click
 
-#If AutoAddSolutionDir Then  ' add the solution directory if the app is being debugged
+#If AutoAddSolutionDir Then  ' add the solution directory if the application is being debugged
         ' get the solution directory (typically 3 directories up from debug output)
         Dim solutionDir = My.Application.Directory
         For i = 1 To 3
@@ -53,6 +53,9 @@ Public Class frmMain
         Next
         pluginDirs.Add(solutionDir)
 #End If
+
+        ' add the default plugin path
+        pluginDirs.Add(System.IO.Path.Combine(My.Application.Directory, "Plugins"))
 
         ahcActivityHost.ScanForPlugins(pluginDirs.ToArray())
     End Sub
