@@ -80,6 +80,7 @@ Partial Class dlgPluginPaths
         Me.lvwDirList.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lvwDirList.Location = New System.Drawing.Point(0, 25)
         Me.lvwDirList.Name = "lvwDirList"
+        Me.lvwDirList.ShowItemToolTips = True
         Me.lvwDirList.Size = New System.Drawing.Size(284, 287)
         Me.lvwDirList.TabIndex = 1
         Me.lvwDirList.UseCompatibleStateImageBehavior = False

@@ -86,6 +86,7 @@
     <Compile Include="dlgPluginPaths.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FolderSelectDialog.vb" />
     <Compile Include="frmMain.vb">
       <SubType>Form</SubType>
     </Compile>

@@ -45,10 +45,13 @@ Public Class dlgPluginPaths
     End Sub
 
     Private Sub tsbAddFolder_Click(sender As Object, e As EventArgs) Handles tsbAddFolder.Click
-        Using fbd As New FolderBrowserDialog() With {.SelectedPath = My.Application.Directory,
-                                             .Description = "Select plugin directory."}
+        Static initialDir As String = My.Application.Directory
+        
+        Using fbd As New FolderSelectDialog() With {.InitialDirectory = initialDir,
+                                                    .Title = "Select plugin directory"}
             If fbd.ShowDialog() = Windows.Forms.DialogResult.OK Then
                 lvwDirList.Items.Add(fbd.SelectedPath)
+                initialDir = System.IO.Directory.GetParent(fbd.SelectedPath).FullName
             End If
         End Using
 

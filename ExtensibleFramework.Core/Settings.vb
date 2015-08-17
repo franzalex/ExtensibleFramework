@@ -1,6 +1,7 @@
 ﻿Imports Newtonsoft.Json
 Imports System.Text.RegularExpressions
 Imports ThreadPool = System.Threading.ThreadPool
+Imports FormatterAssemblyStyle = System.Runtime.Serialization.Formatters.FormatterAssemblyStyle
 
 ''' <summary>
 ''' Dictionary based class for storing settings.
@@ -12,6 +13,13 @@ Public Class Settings
 
     Private Const fileDescriptor As String = "Extensible Application Framework Settings File, Format Version "
     Private Const metadataTag As String = "| Metadata |"
+    Private ReadOnly jsonSettings As JsonSerializerSettings = New JsonSerializerSettings() With {
+                                                                .DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
+                                                                .Formatting = Formatting.Indented,
+                                                                .NullValueHandling = NullValueHandling.Ignore,
+                                                                .TypeNameHandling = TypeNameHandling.Auto,
+                                                                .TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
+                                                            }
 
     Dim _autoSave As Boolean = True
     Dim _fileName As String = ""
@@ -44,7 +52,7 @@ Public Class Settings
         'initialize the base dictionary with the equality comparer
         MyBase.New(comparer)
 
-        'set the filename and then try to open the file for settings.
+        'set the file name and then try to open the file for settings.
         Me._fileName = fileName
         If System.IO.File.Exists(fileName) Then Me.Open(fileName)
 
@@ -86,7 +94,7 @@ Public Class Settings
     End Property
 
     ''' <summary>
-    ''' Get or set the filename of the file to which 
+    ''' Get or set the file name of the file to which 
     ''' this Settings is saved or opened from.
     ''' </summary>
     ''' <value>String. File name of the file to save to or open from.</value>
@@ -204,14 +212,10 @@ Public Class Settings
                     ' proceed with deserialization only if we've got a good file
                     If IsValidFile(descriptor.Value) Then
 
-                        Dim jset = New JsonSerializerSettings() With {
-                                    .DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
-                                    .NullValueHandling = NullValueHandling.Ignore}
-
                         ' copy entries from the deserialized dictionary into ours
                         Me.Clear()
                         For Each kvp In JsonConvert.DeserializeObject(Of Dictionary(Of String, Object)) _
-                                                                     (fileText, jset)
+                                                                     (fileText, jsonSettings)
                             MyBase.Add(kvp.Key, kvp.Value)
                         Next
 
@@ -339,13 +343,7 @@ Public Class Settings
 
 
                 ' add serialized dictionary
-                Dim jset = New JsonSerializerSettings() With {
-                            .DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
-                            .Formatting = Formatting.Indented,
-                            .NullValueHandling = NullValueHandling.Ignore
-                        }
-
-                Dim fileText = JsonConvert.SerializeObject(Me, jset)
+                Dim fileText = JsonConvert.SerializeObject(Me, jsonSettings)
 
                 sw.Write(fileText)
 
