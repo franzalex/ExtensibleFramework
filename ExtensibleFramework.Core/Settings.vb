@@ -32,18 +32,7 @@ Public Class Settings
     ''' <remarks></remarks>
     Public Sub New(ByVal fileName As String)
         'set the base class to ignore case
-        MyBase.New(StringComparer.CurrentCultureIgnoreCase)
-        'set the filename and then try to open the file for settings.
-        'if opening the file fails, create a new one.
-        Me._fileName = fileName
-        If FileExists(fileName) Then
-            Me.Open(fileName)
-            '	If Not Me.Open(fileName) Then
-            '		Me.SaveAs(fileName)
-            '	End If
-            'Else
-            '	Me.SaveAs(fileName)
-        End If
+        Me.New(fileName, StringComparer.CurrentCultureIgnoreCase)
     End Sub
 
     ''' <summary>
@@ -56,16 +45,13 @@ Public Class Settings
         MyBase.New(comparer)
 
         'set the filename and then try to open the file for settings.
-        'if opening the file fails, create a new one.
         Me._fileName = fileName
-        If FileExists(fileName) Then
-            Me.Open(fileName)
-            '	If Not Me.Open(fileName) Then
-            '		Me.SaveAs(fileName)
-            '	End If
-            'Else
-            '	Me.SaveAs(fileName)
-        End If
+        If System.IO.File.Exists(fileName) Then Me.Open(fileName)
+
+        '' ' if file doesn't exist or opening the file fails, create a new one.
+        ''If Not System.IO.File.Exists(fileName) OrElse Not Me.Open(fileName) Then
+        ''    Me.SaveAs(fileName)
+        ''End If
     End Sub
 
     ''' <summary>Initializes a new instance of the <see cref="Settings"/> class.</summary>
@@ -288,6 +274,7 @@ Public Class Settings
                                                  With System.Threading.Thread.CurrentThread
                                                      Dim bgState = .IsBackground
                                                      .IsBackground = False
+                                                     .Name = "Settings.SaveAs()"
                                                      Me.SaveInternal(fileName)
                                                      .IsBackground = bgState
                                                  End With
@@ -300,10 +287,6 @@ Public Class Settings
     End Sub
 
     'private methods
-
-    Private Function FileExists(ByVal fileName As String) As Boolean
-        Return FileIO.FileSystem.FileExists(fileName)
-    End Function
 
     Private Function IsValidFile(ByRef descriptor As String) As Boolean
 
